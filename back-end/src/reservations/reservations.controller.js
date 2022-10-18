@@ -8,7 +8,6 @@ const moment = require("moment");
 
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format('YYYY-MM-DD')
-  // const { date } = req.query
   const data = await service.list(date)
   res.json({data});
 }
