@@ -2,20 +2,24 @@ import React from "react";
 import OneReservation from "./OneReservation"
 
 export default function ListReservations({ reservations }){
-    
+
     return (
         <table>
-            <tr>
+            <thead>
+                <tr>
                 <th>Reservation Name</th>
                 <th>Phone</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Party Size</th>
-            </tr>
+                </tr>
+            </thead>
             
+            <tbody>
             {reservations.map(resv => {
                 return <OneReservation resv={resv}/>
             })}
+            </tbody>
         </table>
     )
 };
