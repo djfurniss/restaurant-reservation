@@ -26,11 +26,17 @@ const hasProperties = (req, res, next) => {
   next();
 };
 
-const hasValidProperties = (property) => {
+const hasValidName = (property) => {
   return (req, res,next) => {
-    
+    if (!req.body.data[property]){
+      next({status: 400, message: `${property} is invalid`})
+    }
+    if (req.body.data[property].length < 3){
+      next({status: 400, message: `${property} must be longer than 3 characters`})
+    }
+    next();
   }
-}
+};
 
 // --- router middleware ---
 async function list(req, res) {
@@ -48,6 +54,8 @@ module.exports = {
   list: asyncErrBoundary(list),
   create: [
     hasProperties,
+    hasValidName("first_name"),
+    hasValidName("last_name"),
     asyncErrBoundary(create)
   ]
 };
