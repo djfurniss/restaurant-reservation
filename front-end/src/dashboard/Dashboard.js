@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ListReservations from "../reservations/ListReservations";
+import { today, previous, next } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -9,7 +10,8 @@ import ListReservations from "../reservations/ListReservations";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard() {
+  const [date, setDate] = useState(today())
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -32,6 +34,8 @@ function Dashboard({ date }) {
       </div>
       <ListReservations reservations={reservations}/>
       <ErrorAlert error={reservationsError} />
+      <button onClick={()=>setDate(previous(date))}>Previous Day</button>
+      <button onClick={()=>setDate(next(date))}>Next Day</button>
     </main>
   );
 }

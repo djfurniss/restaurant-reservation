@@ -4,7 +4,6 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NewReservation from "../reservations/NewReservation"
 import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
 
 function Routes() {
   return (
@@ -17,7 +16,7 @@ function Routes() {
         <NewReservation/>
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        <Dashboard/>
       </Route>
       <Route>
         <NotFound />
