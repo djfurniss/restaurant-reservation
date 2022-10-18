@@ -1,12 +1,21 @@
 import React from "react";
+import OneReservation from "./OneReservation"
 
 export default function ListReservations({ reservations }){
-    // console.log(reservations)
+    
     return (
-        <div>
-            {/* {reservations.map(res => {
-                return <p key={res.reservation_id}>{res.first_name}</p>
-            })} */}
-        </div>
+        <table>
+            <tr>
+                <th>Reservation Name</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Party Size</th>
+            </tr>
+            
+            {reservations.map(resv => {
+                return <OneReservation resv={resv}/>
+            })}
+        </table>
     )
 };
