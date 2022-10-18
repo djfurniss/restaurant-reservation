@@ -1,8 +1,9 @@
 const knex = require("../db/connection")
 
-function list(){
+function list(reservation_date){
     return knex("reservations")
     .select("*")
+    .where({ reservation_date })
 }
 
 function create(newReservation){
@@ -15,4 +16,4 @@ function create(newReservation){
 module.exports = {
     list,
     create
-}
+};

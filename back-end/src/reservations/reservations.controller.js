@@ -1,11 +1,15 @@
 /**
  * List handler for reservation resources
  */
-const service = require("./reservations.service")
-const asyncErrBoundary = require("../errors/asyncErrorBoundary")
+const service = require("./reservations.service");
+const asyncErrBoundary = require("../errors/asyncErrorBoundary");
+const moment = require("moment");
+
 
 async function list(req, res) {
-  const data = await service.list()
+  const date = req.query.date ? req.query.date : moment().format('YYYY-MM-DD')
+  // const { date } = req.query
+  const data = await service.list(date)
   res.json({data});
 }
 
