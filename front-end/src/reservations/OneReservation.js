@@ -1,4 +1,4 @@
-export default function OneReservation({ resv: {first_name, last_name, mobile_number, reservation_date, reservation_time, people} }){
+export default function OneReservation({ resv: {reservation_id, first_name, last_name, mobile_number, reservation_date, reservation_time, people} }){
     return (
         <tr>
             <td>{`${first_name} ${last_name}`}</td>

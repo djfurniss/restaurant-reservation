@@ -17,7 +17,7 @@ export default function ListReservations({ reservations }){
             
             <tbody>
             {reservations.map(resv => {
-                return <OneReservation resv={resv}/>
+                return <OneReservation key={resv.reservation_id} resv={resv}/>
             })}
             </tbody>
         </table>
