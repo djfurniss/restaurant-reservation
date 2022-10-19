@@ -45,7 +45,11 @@ function Dashboard() {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      <ListReservations reservations={reservations}/>
+
+      {reservations.length ?
+      <ListReservations reservations={reservations}/> :
+      <h1>No reservations</h1>}
+      
       <ErrorAlert error={reservationsError} />
       <button onClick={()=>setDate(previous(date))}>Previous Day</button>
       <button onClick={()=>setDate(next(date))}>Next Day</button>
