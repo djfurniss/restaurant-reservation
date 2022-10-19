@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ListReservations from "../reservations/ListReservations";
-import { today, previous, next } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 
 /**
@@ -11,10 +10,9 @@ import useQuery from "../utils/useQuery";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard() {
+function Dashboard({date, setDate, today, previous, next}) {
 // --- hooks / misc. ---
   const query = useQuery();
-  let [date, setDate] = useState(today())
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   
