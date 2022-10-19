@@ -16,17 +16,20 @@ export default function NewReservation(){
     };
 
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+    // const [formErr, setFormErr] = useState([])
 
 // --- handlers ---
     const handleInputChange = ({ target }) => {
         setFormData({...formData, [target.name]: target.value});
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createReservation(formData);
-        setFormData(INITIAL_FORM_DATA);
-        history.push("/");
+        // if (!formErr){
+        await createReservation(formData)
+            setFormData(INITIAL_FORM_DATA);
+            history.push("/");
+        // }
     };
 
     const handleCancel = (e) => {
@@ -37,6 +40,8 @@ export default function NewReservation(){
 // --- return ---
     return (
         <div>
+        {/* //     {formErr &&  */}
+        {/* //     formErr.map(err => <p>{err}</p>)} */}
             <form
                 onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First name</label>
