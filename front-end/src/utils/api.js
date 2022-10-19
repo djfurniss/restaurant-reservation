@@ -79,6 +79,4 @@ export async function createReservation(newReservation, signal){
    };
 
   return await fetchJson(url, options, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
 };

@@ -20,7 +20,7 @@ const hasProperties = (req, res, next) => {
   
   for (let property of validProperties){
     if (!data.hasOwnProperty(property)){
-      next({status: 400, message: `${property} is required`})
+      res.json({error: `${property} is required`})
     }
   }
   next();
@@ -30,9 +30,6 @@ const hasValidName = (property) => {
   return (req, res,next) => {
     if (!req.body.data[property]){
       next({status: 400, message: `${property} is invalid`})
-    }
-    if (req.body.data[property].length < 3){
-      next({status: 400, message: `${property} must be longer than 3 characters`})
     }
     next();
   }
