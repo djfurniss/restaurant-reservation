@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import { getDay } from "../utils/date-time";
 
-export default function NewReservation({ setDate }){
+export default function NewReservation({ setDate, today }){
 // --- hooks ---
     const history = useHistory();
 
@@ -16,11 +17,28 @@ export default function NewReservation({ setDate }){
     };
 
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-    const [formErr, setFormErr] = useState(null)
+        // formErr state is simply for form validation and is set depending on what error comes back from the API
+    const [formErr, setFormErr] = useState(null);
+        // isTuesday and isPast validations dynamically change as the user change the reservation date selection and they may need to be displayed at the same time
+        // by default they are false; error messages conditionally rendered based on their states
+    const [isTuesday, setIsTuesday] = useState(false);
+    const [isInPast, setIsInPast] = useState(false);
 
 // --- handlers ---
     const handleInputChange = ({ target }) => {
         setFormData({...formData, [target.name]: target.value});
+
+        // specifcallly checks the reservation date as it changes
+        if (target.name === "reservation_date"){
+        // renders the error message if user selects a date before the current date
+            if (target.value < today()){
+                setIsInPast(true)
+            }else setIsInPast(false)
+        //renders the error message if user selects a Tuesday
+            if (getDay(target.value) == "Tuesday"){
+                setIsTuesday(true)
+            }else setIsTuesday(false)
+        };
     };
     
     const handleSubmit = async (e) => {
@@ -36,6 +54,7 @@ export default function NewReservation({ setDate }){
                 history.push("/");
             })
             .catch(err => {
+                // the api returns any errors and setFormErr changes state so that the error messages are rendered
                 setFormErr(err.message)
             })
     };
@@ -48,7 +67,13 @@ export default function NewReservation({ setDate }){
 // --- return ---
     return (
         <div>
-        {formErr && <p>{formErr}</p>}
+            {/*isTueday and isInPast only need to be rendered if it already isnt via formErr
+            the server returns identical error messages for the api
+            so in the catch, the same message will display as the formErr and
+            would be rendered more than once. This prevents that.*/}
+        {isTuesday && !formErr ? <p className="alert alert-danger">We are closed on Tuesdays, please select another day.</p> : null}
+        {isInPast && !formErr ? <p className="alert alert-danger">Please schedule a reservation at a future date.</p> : null}
+        {formErr ? <p className="alert alert-danger">{formErr}</p> : null}
             <form
                 onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First name</label>
@@ -80,6 +105,7 @@ export default function NewReservation({ setDate }){
                     type="date"
                     value={formData.reservation_date}
                     onChange={handleInputChange}
+                    min={today()}
                     pattern="\d{4}-\d{2}-\d{2}"
                     required/>
 
