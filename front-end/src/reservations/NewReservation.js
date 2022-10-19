@@ -16,7 +16,7 @@ export default function NewReservation({ setDate }){
     };
 
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-    // const [formErr, setFormErr] = useState([])
+    const [formErr, setFormErr] = useState(null)
 
 // --- handlers ---
     const handleInputChange = ({ target }) => {
@@ -25,15 +25,21 @@ export default function NewReservation({ setDate }){
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        formData.people = Number(formData.people)
+
+         //before sending the data back to the server, the value for people must be a number
+        formData.people = Number(formData.people);
         await createReservation(formData)
             .then(newRes => {
+                //use the date setter to set the date state to the newly created reservation's date so when the user is pushed back to the dashboard, it loads with the date of the new reservation.
                 setDate(newRes.reservation_date)
+                setFormData(INITIAL_FORM_DATA);
+                history.push("/");
             })
-            setFormData(INITIAL_FORM_DATA);
-            history.push("/");
+            .catch(err => {
+                setFormErr(err.message)
+            })
     };
-
+    
     const handleCancel = (e) => {
         e.preventDefault();
         history.go(-1);
@@ -42,8 +48,7 @@ export default function NewReservation({ setDate }){
 // --- return ---
     return (
         <div>
-        {/* //     {formErr &&  */}
-        {/* //     formErr.map(err => <p>{err}</p>)} */}
+        {formErr && <p>{formErr}</p>}
             <form
                 onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First name</label>
@@ -65,6 +70,8 @@ export default function NewReservation({ setDate }){
                     name="mobile_number"
                     value={formData.mobile_number}
                     onChange={handleInputChange}
+                    pattern="\d{3}-\d{3}-\d{4}"
+                    placeholder="XXX-XXX-XXXX"
                     required/>
 
                 <label htmlFor="reservation_date">Date of reservation</label>
@@ -73,6 +80,7 @@ export default function NewReservation({ setDate }){
                     type="date"
                     value={formData.reservation_date}
                     onChange={handleInputChange}
+                    pattern="\d{4}-\d{2}-\d{2}"
                     required/>
 
                 <label htmlFor="reservation_time">Time of reservation</label>
@@ -81,6 +89,7 @@ export default function NewReservation({ setDate }){
                     type="time"
                     value={formData.reservation_time}
                     onChange={handleInputChange}
+                    pattern="[0-9]{2}:[0-9]{2}"
                     required/>
 
                 <label htmlFor="people">Party size</label>
