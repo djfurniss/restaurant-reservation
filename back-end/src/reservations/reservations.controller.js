@@ -20,7 +20,7 @@ const hasProperties = (req, res, next) => {
   
   for (let property of validProperties){
     if (!data.hasOwnProperty(property)){
-      res.json({error: `${property} is required`})
+      next({status:400, message: `${property} is required`})
     }
   }
   next();
@@ -35,6 +35,15 @@ const hasValidName = (property) => {
   }
 };
 
+const hasValidPartySize = (party) => {
+  return (req, res, next) => {
+    if (req.body.data[party] <= 0){
+      next({status: 400, message: "Party size must be greater than 0."})
+    }
+    next();
+  }
+};
+
 // --- router middleware ---
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format('YYYY-MM-DD')
@@ -44,7 +53,7 @@ async function list(req, res) {
 
 async function create(req, res){
   const data = await service.create(req.body.data)
-  res.status(203).json({ data})
+  res.status(201).json({ data})
 };
 
 module.exports = {
@@ -53,6 +62,7 @@ module.exports = {
     hasProperties,
     hasValidName("first_name"),
     hasValidName("last_name"),
+    hasValidPartySize("people"),
     asyncErrBoundary(create)
   ]
 };
