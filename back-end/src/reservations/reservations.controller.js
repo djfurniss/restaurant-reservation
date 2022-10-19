@@ -39,13 +39,13 @@ const hasValidNames = () => {
 
 const hasValidPartySize = () => {
   return (req, res, next) => {
-    const { people } = req.body.data;
-    if (typeof people !== "number"){
-      next({status: 400, message: "people property must be a number"});
-    };
+    let { people } = req.body.data
+    if (typeof people != "number"){
+        next({status: 400, message: "people property must be a number"});
+    }
     if (people <= 0){
       next({status: 400, message: "people property must be greater than 0."});
-    };
+    }
     next();
   };
 };

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 
-export default function NewReservation(){
+export default function NewReservation({ setDate }){
 // --- hooks ---
     const history = useHistory();
 
@@ -25,11 +25,13 @@ export default function NewReservation(){
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if (!formErr){
+        formData.people = Number(formData.people)
         await createReservation(formData)
+            .then(newRes => {
+                setDate(newRes.reservation_date)
+            })
             setFormData(INITIAL_FORM_DATA);
             history.push("/");
-        // }
     };
 
     const handleCancel = (e) => {
@@ -84,6 +86,7 @@ export default function NewReservation(){
                 <label htmlFor="people">Party size</label>
                 <input
                     name="people"
+                    type="number"
                     value={formData.people}
                     onChange={handleInputChange}
                     required/>
