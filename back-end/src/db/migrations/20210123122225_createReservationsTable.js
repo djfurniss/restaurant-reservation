@@ -1,3 +1,10 @@
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+
+require("dotenv").config()
+
 exports.up = function (knex) {
   return knex.schema.createTable("reservations", (table) => {
     table.increments("reservation_id").primary();
