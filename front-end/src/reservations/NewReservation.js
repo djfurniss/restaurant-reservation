@@ -34,7 +34,7 @@ export default function NewReservation(){
 
     const handleCancel = (e) => {
         e.preventDefault();
-        history.push("/");
+        history.go(-1);
     };
 
 // --- return ---
