@@ -49,9 +49,10 @@ function Dashboard() {
       {reservations.length ?
       <ListReservations reservations={reservations}/> :
       <h1>No reservations</h1>}
-      
+
       <ErrorAlert error={reservationsError} />
       <button onClick={()=>setDate(previous(date))}>Previous Day</button>
+      <button onClick={()=>setDate(today())}>Today</button>
       <button onClick={()=>setDate(next(date))}>Next Day</button>
     </main>
   );
