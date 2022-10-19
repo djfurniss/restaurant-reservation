@@ -1,3 +1,4 @@
+const moment = require('moment');
 const dateFormat = /\d\d\d\d-\d\d-\d\d/;
 const timeFormat = /\d\d:\d\d/;
 
@@ -16,7 +17,7 @@ function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
-}
+};
 
 /**
  * Format a date string in ISO-8601 format (which is what is returned from PostgreSQL) as YYYY-MM-DD.
@@ -27,7 +28,7 @@ function asDateString(date) {
  */
 export function formatAsDate(dateString) {
   return dateString.match(dateFormat)[0];
-}
+};
 
 /**
  * Format a time string in HH:MM:SS format (which is what is returned from PostgreSQL) as HH:MM.
@@ -38,7 +39,7 @@ export function formatAsDate(dateString) {
  */
 export function formatAsTime(timeString) {
   return timeString.match(timeFormat)[0];
-}
+};
 
 /**
  * Today's date as YYYY-MM-DD.
@@ -47,7 +48,7 @@ export function formatAsTime(timeString) {
  */
 export function today() {
   return asDateString(new Date());
-}
+};
 
 /**
  * Subtracts one day to the specified date and return it in as YYYY-MM-DD.
@@ -63,7 +64,7 @@ export function previous(currentDate) {
   date.setMonth(date.getMonth());
   date.setDate(date.getDate() - 1);
   return asDateString(date);
-}
+};
 
 /**
  * Adds one day to the specified date and return it in as YYYY-MM-DD.
@@ -79,4 +80,15 @@ export function next(currentDate) {
   date.setMonth(date.getMonth());
   date.setDate(date.getDate() + 1);
   return asDateString(date);
-}
+};
+
+/**
+ * Returns the week day of a given date
+ * @param date
+ *  a date string in YYYY-MM-DD format (this is also ISO-8601 format)
+ * @returns {*}
+ *  The date parameter's week day.
+ */
+export function getDay(date){
+  return moment(date).format("dddd")
+};

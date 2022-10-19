@@ -67,6 +67,17 @@ const hasValidResDate = () => {
     if (!pattern.test(reservation_date)){
       next({status: 400, message: "reservation_date is not a valid date"});
     };
+    // if the date is before the current day, send an error message
+    const today = moment().format('YYYY-MM-DD')
+    if ( reservation_date < today){
+      next({status: 400, message: "Please schedule a reservation at a future date."})
+    };
+    //if the day is Tuesday, send an error message
+    const reservationDay = moment(reservation_date).format("dddd")
+    if (reservationDay === "Tuesday"){
+      next({status: 400, message: "We are closed on Tuesdays, please select another day."})
+    };
+
     next();
   };
 };
