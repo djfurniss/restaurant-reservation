@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ListReservations from "../reservations/ListReservations";
@@ -13,29 +14,31 @@ import useQuery from "../utils/useQuery";
 function Dashboard({date, setDate, today, previous, next}) {
 // --- hooks / misc. ---
   const query = useQuery();
+  const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   
-// --- useEffect --- 
-  useEffect(getQuery, []);
-    // ^ in a separate useEffect with no dependencies so it uses setDate() once and the next useEffect can dynamically change and doesn't continuously setDate() using the satic query string in the URL
-  useEffect(loadDashboard, [date]);
-  
-  function getQuery(){
-      if (query.get("date")){
-        setDate(query.get("date"))
-      };
-  };
-    
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
-    return () => abortController.abort();
-  };
+// --- useEffect ---
+  useEffect(() => {
+    function updateQuery(){
+      query.set("date", date);
+      var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
+      history.push(newRelativePathQuery);
+    };
 
+    function loadDashboard() {
+        const abortController = new AbortController();
+        setReservationsError(null);
+        listReservations({ date }, abortController.signal)
+        .then(setReservations)
+        .catch(setReservationsError);
+        return () => abortController.abort();
+    };
+    
+    updateQuery();
+    loadDashboard();
+  }, [date]);
+    
 // --- return ---
   return (
     <main>
