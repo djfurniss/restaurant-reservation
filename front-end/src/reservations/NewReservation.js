@@ -33,12 +33,12 @@ export default function NewReservation({ setDate, today }){
         // renders the error message if user selects a date before the current date
             if (target.value < today()){
                 setIsInPast(true)
-            }else setIsInPast(false)
+            }else setIsInPast(false) 
         //renders the error message if user selects a Tuesday
-            if (getDay(target.value) == "Tuesday"){
+            if(getDay(target.value) === "Tuesday"){
                 setIsTuesday(true)
-            }else setIsTuesday(false)
-        };
+            }else(setIsTuesday(false))
+        }
     };
     
     const handleSubmit = async (e) => {
@@ -95,7 +95,6 @@ export default function NewReservation({ setDate, today }){
                     name="mobile_number"
                     value={formData.mobile_number}
                     onChange={handleInputChange}
-                    pattern="\d{3}-\d{3}-\d{4}"
                     placeholder="XXX-XXX-XXXX"
                     required/>
 
@@ -106,7 +105,6 @@ export default function NewReservation({ setDate, today }){
                     value={formData.reservation_date}
                     onChange={handleInputChange}
                     min={today()}
-                    pattern="\d{4}-\d{2}-\d{2}"
                     required/>
 
                 <label htmlFor="reservation_time">Time of reservation</label>
@@ -115,7 +113,6 @@ export default function NewReservation({ setDate, today }){
                     type="time"
                     value={formData.reservation_time}
                     onChange={handleInputChange}
-                    pattern="[0-9]{2}:[0-9]{2}"
                     required/>
 
                 <label htmlFor="people">Party size</label>

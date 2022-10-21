@@ -85,10 +85,20 @@ const hasValidResDate = () => {
 const hasValidResTime = () => {
   return (req, res,next) => {
     const { reservation_time } = req.body.data;
-    const pattern = /[0-9]{2}:[0-9]{2}/;
+    const pattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!pattern.test(reservation_time)){
       next({status: 400, message: "reservation_time is not a valid time"});
     };
+
+    if (reservation_time < "10:30" || reservation_time > "21:30"){
+      next({status: 400, message: "Reservation must be between 10:30 AM and 9:30 PM"});
+    };
+
+    const today = moment().format("YYYY-MM-DD");
+    const currentTime = moment().format("HH:mm"); // ==> 00:00 - 23:59 range
+    if (req.body.data.reservation_date === today  && reservation_time < currentTime){
+      next({status: 400, message: "Please select a future time for today"});
+    }
     next();
   };
 };
