@@ -15,8 +15,10 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route exact={true} path="/reservations/new">
-        {/* <Redirect to={"/dashboard"} /> */}
         <NewReservation setDate={setDate} today={today}/>
+      </Route>
+      <Route exact={true} path="/tables/new">
+        <h1>/tables/new</h1>
       </Route>
       <Route path="/dashboard">
         <Dashboard date={date} setDate={setDate} today={today} previous={previous} next={next}/>
