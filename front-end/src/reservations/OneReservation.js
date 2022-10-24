@@ -9,10 +9,13 @@ export default function OneReservation({ resv: {reservation_id, first_name, last
             <td>{reservation_date}</td>
             <td>{reservation_time}</td>
             <td>{people}</td>
-            <td><button 
+            <td>
+                <button 
                     onClick={()=>history.push(`/reservations/${reservation_id}/seat`)}
-                    href={`/reservations/${reservation_id}/seat`}>Seat</button></td>
+                    href={`/reservations/${reservation_id}/seat`}>
+                    Seat
+                </button>
+            </td>
         </tr>
     )
-
 };
