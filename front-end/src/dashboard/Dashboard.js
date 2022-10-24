@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ListReservations from "../reservations/ListReservations";
+import TableList from "../tables/TableList"
 import useQuery from "../utils/useQuery";
 
 /**
@@ -16,6 +17,7 @@ function Dashboard({date, setDate, today, previous, next}) {
   const query = useQuery();
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   
 // --- useEffect ---
@@ -30,11 +32,13 @@ function Dashboard({date, setDate, today, previous, next}) {
         const abortController = new AbortController();
         setReservationsError(null);
         listReservations({ date }, abortController.signal)
-        .then(setReservations)
-        .catch(setReservationsError);
+          .then(setReservations)
+          .catch(setReservationsError);
+        listTables(abortController.signal)
+          .then(setTables)
         return () => abortController.abort();
     };
-    
+
     updateQuery();
     loadDashboard();
   }, [date]);
@@ -43,6 +47,12 @@ function Dashboard({date, setDate, today, previous, next}) {
   return (
     <main>
       <h1>Dashboard</h1>
+      <ErrorAlert error={reservationsError} />
+
+      <button onClick={()=>setDate(previous(date))}>Previous Day</button>
+      <button onClick={()=>setDate(today())}>Today</button>
+      <button onClick={()=>setDate(next(date))}>Next Day</button>
+
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
@@ -51,10 +61,12 @@ function Dashboard({date, setDate, today, previous, next}) {
       <ListReservations reservations={reservations}/> :
       <h1>No reservations</h1>}
 
-      <ErrorAlert error={reservationsError} />
-      <button onClick={()=>setDate(previous(date))}>Previous Day</button>
-      <button onClick={()=>setDate(today())}>Today</button>
-      <button onClick={()=>setDate(next(date))}>Next Day</button>
+      <h1>Tables</h1>
+      {tables.length ?
+      <TableList tables={tables}/> :
+      <h2>No tables</h2>
+      }
+
     </main>
   );
 };

@@ -58,11 +58,6 @@ export default function NewReservation({ setDate, today }){
                 setFormErr(err.message)
             })
     };
-    
-    const handleCancel = (e) => {
-        e.preventDefault();
-        history.go(-1);
-    };
 
 // --- return ---
     return (
@@ -125,8 +120,7 @@ export default function NewReservation({ setDate, today }){
 
                 <button
                     type="submit">Make reservation</button>
-                <button
-                    onClick={handleCancel}>Cancel</button>
+                <button onClick={()=>history.go(-1)}>Cancel</button>
             </form>
         </div>
     )
