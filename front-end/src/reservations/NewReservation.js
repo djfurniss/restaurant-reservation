@@ -43,9 +43,6 @@ export default function NewReservation({ setDate, today }){
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-         //before sending the data back to the server, the value for people must be a number
-        formData.people = Number(formData.people);
         await createReservation(formData)
             .then(newRes => {
                 //use the date setter to set the date state to the newly created reservation's date so when the user is pushed back to the dashboard, it loads with the date of the new reservation.
