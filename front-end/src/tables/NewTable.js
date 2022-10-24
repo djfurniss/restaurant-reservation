@@ -1,0 +1,59 @@
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { createTable } from "../utils/api";
+
+export default function NewTable() {
+// --- hooks and misc. ---
+    const history = useHistory();
+
+    const INITIAL_TABLE_DATA = {
+        table_name: "",
+        capacity: 0
+    };
+
+    const [tableData, setTableData] = useState(INITIAL_TABLE_DATA);
+    const [formErr, setFormErr] = useState(null);
+
+// --- handlers ---
+    const handleInputChange = ({ target }) => {
+        setTableData({...tableData, [target.name]: target.value})
+    };
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        await createTable(tableData)
+            .then(() => history.push("/"))
+            .catch(err => setFormErr(err.message))
+    };
+
+// --- return ---
+    return (
+        <div>
+            {formErr ? <p className="alert alert-danger">{formErr}</p> : null}
+            <form
+                onSubmit={handleSubmit}>
+                <label
+                    htmlFor="table_name">Table Name</label>
+                <input 
+                    name="table_name"
+                    type="text"
+                    value={tableData.table_name}
+                    onChange={handleInputChange}
+                    required/>
+
+                <label
+                    htmlFor="capacity">Table Capacity</label>
+
+                <input 
+                    name="capacity"
+                    type="number"
+                    value={tableData.capacity}
+                    onChange={handleInputChange}
+                    required/>
+                <button type="submit">Add Table</button>
+                <button onClick={()=>history.go(-1)}>Cancel</button>
+            </form>
+        </div>
+    )
+};
+

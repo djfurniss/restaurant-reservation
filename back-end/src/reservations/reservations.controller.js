@@ -115,6 +115,37 @@ async function create(req, res){
   res.status(201).json({ data});
 };
 
+async function read(req, res, next){
+  // this function depends on wether the reservation_id is coming from the request's params or the body's data
+  // the rest of the client's request will behave differntly in each case
+  // both return the same error message
+
+  // it will always deal with a varaible named reservation_id
+  let reservation_id
+  // if it's defined in the url params, 
+  if(req.params.reservation_id){ 
+    // the varialbe gets its assignment, 
+    reservation_id = req.params.reservation_id
+    const foundRes = await service.read(reservation_id)
+    if(foundRes){
+      // once the reservation is found, it's returned to the client and the request ends
+      res.json({data: foundRes})
+    }else next({status: 404, message: "999"})
+
+  // if the reservation_id is within the req.body.data though, 
+  }else if (req.body.data.reservation_id){
+    // the variable gets its assignment
+    reservation_id = req.body.data.reservation_id
+    const foundRes = await service.read(reservation_id)
+    if(foundRes){
+      // HERE is the difference
+      // once the reservation is found, the request is not over,it will get passed to the next piece of middleware with the reservation that was found as part of res.locals to be accessed throug the rest of the request
+      res.locals.reservation = foundRes
+      next();
+    }else next({status: 404, message: "999"})
+  };
+};
+
 module.exports = {
   list: asyncErrBoundary(list),
   create: [
@@ -125,5 +156,6 @@ module.exports = {
     hasValidResDate(),
     hasValidResTime(),
     asyncErrBoundary(create)
-  ]
+  ],
+  read: asyncErrBoundary(read)
 };
