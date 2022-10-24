@@ -1,8 +1,7 @@
 module.exports = [
     {
         "table_name": "#1",
-        "capacity": 6,
-        "reservation_id": 1
+        "capacity": 6
     },
     {
         "table_name": "#2",
