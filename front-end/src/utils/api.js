@@ -70,7 +70,8 @@ export async function listReservations(params, signal) {
 
 export async function createReservation(newReservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-
+  // the api will not except the string version of the people property so it needs to be turned into a number first
+  newReservation.people = Number(newReservation.people);
   const options = {
     method: "POST",
     headers,
@@ -90,7 +91,8 @@ export async function listTables(signal) {
 
 export async function createTable(newTable, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-
+  // the api will not except the string version of capacity so it needs to be turned into a number first
+  newTable.capacity = Number(newTable.capacity)
   const options = {
     method: "POST",
     headers,
@@ -99,4 +101,18 @@ export async function createTable(newTable, signal) {
    };
 
   return await fetchJson(url, options, [])
-}
+};
+
+export async function seat(reservation_id, table_id, signal){
+  console.log(`In api call. reservation: ${reservation_id} | table: ${table_id}`);
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: {reservation_id} }),
+    signal,
+   };
+
+  return await fetchJson(url, options, [])
+};
