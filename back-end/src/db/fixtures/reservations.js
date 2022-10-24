@@ -48,6 +48,16 @@ module.exports = [
       "people": 2,
       "created_at": "2020-12-10T08:31:32.326Z",
       "updated_at": "2020-12-10T08:31:32.326Z"
-    }
+    },
+    // {
+    //   "first_name": "Me",
+    //   "last_name": "Testing",
+    //   "mobile_number": "225-698-7412",
+    //   "reservation_date": "2022-10-24",
+    //   "reservation_time": "20:00:00",
+    //   "people": 4,
+    //   "created_at": "2020-12-10T08:30:32.326Z",
+    //   "updated_at": "2020-12-10T08:30:32.326Z"
+    // },
   ]
   
