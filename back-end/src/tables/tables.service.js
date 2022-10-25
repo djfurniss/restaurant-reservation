@@ -1,12 +1,12 @@
 const knex = require("../db/connection")
 
-function list() {
+function list(){
     return knex("tables")
     .select("*")
     .orderBy("table_name")
 };
 
-function create(newTable) {
+function create(newTable){
     return knex("tables")
     .insert(newTable)
     .returning("*")
@@ -29,9 +29,16 @@ function update(table_id, reservation_id){
     .then(updatedTable => updatedTable[0])
 };
 
+function finishTable(table_id){
+    return knex("tables")
+    .where({ table_id })
+    .update("reservation_id", null)
+};
+
 module.exports = {
     list,
     create,
     read,
-    update
+    update,
+    finishTable
 };
