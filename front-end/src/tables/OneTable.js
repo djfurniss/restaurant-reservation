@@ -7,7 +7,6 @@ export default function OneTable ({ table }) {
     const handleFinish = async() => {
         window.confirm("Is this table ready to seat new guests?") && 
         await finishTable(table.table_id) && 
-        await updateResStatus(table.reservation_id, "finished") &&
         history.go(0)
     };
 

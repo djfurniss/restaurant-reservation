@@ -32,10 +32,9 @@ export default function Seating() {
         e.preventDefault();
         const abortController = new AbortController();
         seat(reservation_id, seatData, abortController.signal)
-            .then(() => {
+            .then(async () => {
                 history.push("/dashboard")
                 setSeatData("")
-                updateResStatus(reservation_id, "seated", abortController.signal)
             })
             .catch(err => setSeatErr(err.message))
         return () => abortController.abort()
