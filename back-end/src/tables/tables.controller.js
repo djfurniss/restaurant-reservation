@@ -25,7 +25,16 @@ const tableExists = async(req, res, next) => {
     if (foundTable){
         res.locals.table = foundTable
         next();
-    } else next({status: 400, message: `table with id ${table_id} does not exist`});
+    } else next({status: 404, message: `table with id ${table_id} does not exist`});
+};
+
+// makes sure a table is occupied before removing a reservation assignment
+const isOccupied = (req, res, next) => {
+    const { reservation_id } = res.locals.table
+    if (!reservation_id) {
+        next({status: 400, message: `table is not occupied`})
+    };
+    next();
 };
 
 const canSeatParty = async(req, res, next) => {
@@ -34,12 +43,12 @@ const canSeatParty = async(req, res, next) => {
     // after using the reservation's validation to check if the reservation exists, the reservation can be found in res.locals
     const { people } = res.locals.reservation
 
-// if the table is occupied
+    // if the table is occupied, it cannot seat the party
     if (res.locals.table.reservation_id != null){
         next({status: 400, message: "This table is occupied"})
     };
 
-// if the party size is too big
+    // if the party size is too big
     if (people > capacity){
         next({status: 400, message: `Party of ${people} cannot fit at this table's capacity.`})
     };
@@ -94,6 +103,13 @@ async function update (req, res) {
     res.json({data: updatedTable})
 };
 
+async function destroy (req, res) {
+    const { table_id } = res.locals.table
+    await service.finishTable(table_id)
+    // res.sendStatus(204)
+    res.json({data: "done!"})
+};
+
 module.exports = {
     list: asyncErrBoundary(list),
     create: [
@@ -106,6 +122,11 @@ module.exports = {
         hasValidData,
         reservationExists,
         asyncErrBoundary(tableExists),
-        asyncErrBoundary(canSeatParty),
-        asyncErrBoundary(update)]
+        canSeatParty,
+        asyncErrBoundary(update)],
+    delete: [
+        asyncErrBoundary(tableExists),
+        isOccupied,
+        asyncErrBoundary(destroy)
+    ]
 };
