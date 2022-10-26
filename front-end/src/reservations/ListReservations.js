@@ -12,6 +12,7 @@ export default function ListReservations({ reservations }){
                 <th>Date</th>
                 <th>Time</th>
                 <th>Party Size</th>
+                <th>Status</th>
                 </tr>
             </thead>
             

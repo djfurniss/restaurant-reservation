@@ -1,8 +1,15 @@
 import { useHistory } from "react-router";
-import { finishTable } from "../utils/api";
+import { finishTable, updateResStatus } from "../utils/api";
 
 export default function OneTable ({ table }) {
     const history = useHistory();
+
+    const handleFinish = async() => {
+        window.confirm("Is this table ready to seat new guests?") && 
+        await finishTable(table.table_id) && 
+        history.go(0)
+    };
+
     return (
         <tr>
             <td>{table.table_name}</td>
@@ -13,10 +20,7 @@ export default function OneTable ({ table }) {
             {table.reservation_id && 
             <td>
                 <button 
-                    onClick={async()=>{
-                        window.confirm("Is this table ready to seat new guests?") && 
-                        await finishTable(table.table_id) && history.go(0)
-                    }}
+                    onClick={handleFinish}
                     data-table-id-finish={table.table_id}
                     >finish
                 </button>

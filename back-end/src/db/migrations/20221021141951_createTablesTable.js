@@ -14,6 +14,7 @@ exports.up = function (knex) {
         table.foreign("reservation_id")
         .references("reservation_id")
         .inTable("reservations")
+      table.unique(["table_id", "reservation_id"])
       table.timestamps(true, true);
     });
 };

@@ -1,7 +1,7 @@
 const asyncErrBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
 const { read: reservationExists } = require("../reservations/reservations.controller");
-const reservationsRouter = require("../reservations/reservations.router");
+const { update: updateResStatus } = require("../reservations/reservations.service")
 
 const REQUIRED_PROPERTIES = [
     "table_name", "capacity"
@@ -41,7 +41,7 @@ const canSeatParty = async(req, res, next) => {
    // after validating that the table exists, the table can be accessed through res locals
     const { capacity } = res.locals.table;
     // after using the reservation's validation to check if the reservation exists, the reservation can be found in res.locals
-    const { people } = res.locals.reservation
+    const { people, status } = res.locals.reservation
 
     // if the table is occupied, it cannot seat the party
     if (res.locals.table.reservation_id != null){
@@ -51,6 +51,10 @@ const canSeatParty = async(req, res, next) => {
     // if the party size is too big
     if (people > capacity){
         next({status: 400, message: `Party of ${people} cannot fit at this table's capacity.`})
+    };
+
+    if (status === "seated"){
+        next({status: 400, message:`reservation is already seated`})
     };
     next();
 };
@@ -98,13 +102,18 @@ async function update (req, res) {
     // the reservation from the request body also goes through verification and is assigned to locals if it's valid and exists
     const { reservation_id } = res.locals.reservation
     // once everything goes through validation, the update service is called
+    // await updateResStatus(reservation_id)
     const updatedTable = await service.update(table_id, reservation_id)
+    // ? the tests don't make their own api call to /reservation/:reservation_id/status so I had to import the service function from the reservations.service into this one api call to update the reservation's status
+    await updateResStatus(reservation_id, "seated");
     // the table is returned with the updated information
     res.json({data: updatedTable})
+    // next();
 };
 
 async function destroy (req, res) {
-    const { table_id } = res.locals.table
+    const { table_id, reservation_id } = res.locals.table
+    await updateResStatus(reservation_id, "finished")
     await service.finishTable(table_id)
     // res.sendStatus(204)
     res.json({data: "done!"})
