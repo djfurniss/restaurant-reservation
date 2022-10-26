@@ -115,6 +115,16 @@ async function create(req, res){
   res.status(201).json({ data});
 };
 
+async function update(req, res, next){
+  const { reservation_id } = req.params
+  const { data = {} } = req.body
+  if(!data.status){
+    next({status: 400, message: "need a status"})
+  };
+  const updatedRes = await service.update(reservation_id, data.status)
+  res.json({data: updatedRes})
+};
+
 async function read(req, res, next){
   // this function depends on wether the reservation_id is coming from the request's params or the body's data
   // the rest of the client's request will behave differntly in each case
@@ -157,5 +167,6 @@ module.exports = {
     hasValidResTime(),
     asyncErrBoundary(create)
   ],
+  update: asyncErrBoundary(update),
   read: asyncErrBoundary(read)
 };
