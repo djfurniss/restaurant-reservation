@@ -14,6 +14,7 @@ router.route("/")
 router.route("/:reservation_id")
     .get(controller.read)
 
+// no calls are made to this endpoint, it's just for tests purposes
 router.route("/:reservation_id/status")
     .put(controller.update)
 
