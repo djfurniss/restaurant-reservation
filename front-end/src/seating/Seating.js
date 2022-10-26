@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { listTables, seat } from "../utils/api";
+import { listTables, seat, updateResStatus } from "../utils/api";
 
 export default function Seating() {
 // --- hooks, state, misc. ---
@@ -35,6 +35,7 @@ export default function Seating() {
             .then(() => {
                 history.push("/dashboard")
                 setSeatData("")
+                updateResStatus(reservation_id, "seated", abortController.signal)
             })
             .catch(err => setSeatErr(err.message))
         return () => abortController.abort()
