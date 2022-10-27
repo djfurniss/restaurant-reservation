@@ -127,8 +127,13 @@ const hasValidStatus = (req, res, next) => {
 // --- router middleware ---
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format('YYYY-MM-DD');
-  const data = await service.list(date);
-  res.json({data});
+  if (req.query.mobile_number){
+    const data = await service.findByNumber(req.query.mobile_number)
+    res.json({data});
+  }else{
+    const data = await service.list(date);
+    res.json({data});
+  };
 };
 
 async function create(req, res){
