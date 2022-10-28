@@ -12,7 +12,7 @@ export default function OneReservation({ resv, purpose }){
             <td>{resv.reservation_date}</td>
             <td>{resv.reservation_time}</td>
             <td>{resv.people}</td>
-            <td data-reservation-id-status={`${resv.reservation_id}`} >{resv.status}</td>
+            <td data-reservation-id-status={resv.reservation_id} >{resv.status}</td>
             {resv.status === "booked" &&
             <td>
                 <button 
