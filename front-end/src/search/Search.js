@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { findReservation, findReservationByNumber } from "../utils/api";
+import { findReservationByNumber } from "../utils/api";
 import ListReservations from "../reservations/ListReservations";
 
 export default function Search(){
@@ -27,7 +27,7 @@ export default function Search(){
             </form>
 
             {reservations.length ?
-            <ListReservations reservations={reservations}/> :
+            <ListReservations reservations={reservations} purpose={"search"}/> :
             <h1>No reservations found</h1>}
         </div>
     )
