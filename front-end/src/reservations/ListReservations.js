@@ -1,8 +1,7 @@
 import React from "react";
 import OneReservation from "./OneReservation"
 
-export default function ListReservations({ reservations }){
-
+export default function ListReservations({ reservations, purpose }){
     return (
         <table>
             <thead>
@@ -18,7 +17,7 @@ export default function ListReservations({ reservations }){
             
             <tbody>
             {reservations.map(resv => {
-                return <OneReservation key={resv.reservation_id} resv={resv}/>
+                return <OneReservation key={resv.reservation_id} resv={resv} purpose={purpose}/>
             })}
             </tbody>
         </table>
