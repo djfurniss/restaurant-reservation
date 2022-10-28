@@ -75,7 +75,7 @@ function updateQuery (newDate) {
       </div>
 
       {reservations.length ?
-      <ListReservations reservations={reservations}/> :
+      <ListReservations reservations={reservations} purpose={"dashboard"}/> :
       <h1>No reservations</h1>}
 
       <h1>Tables</h1>

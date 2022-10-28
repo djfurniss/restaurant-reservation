@@ -84,12 +84,54 @@ export async function createReservation(newReservation, signal){
     .then(formatReservationTime);
 };
 
+export async function readReservation(reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+};
+
+export async function updateReservation(updatedInfo, reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  
+  await formatReservationDate(updatedInfo);
+  await formatReservationTime(updatedInfo);
+
+  updatedInfo.people = Number(updatedInfo.people);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: updatedInfo }),
+    signal,
+  };
+
+  return await fetchJson(url, options, [])
+  .then(formatReservationDate)
+  .then(formatReservationTime);
+};
+
+export async function updateStatus(reservation_id, status, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: {status} }),
+    signal,
+  };
+
+  return await fetchJson(url, options, [])
+  .then(formatReservationDate)
+  .then(formatReservationTime);
+};
+
 export async function findReservationByNumber(mobile_number, signal){
   const url = new URL(`${API_BASE_URL}/reservations/?mobile_number=${mobile_number}`);
 
   return await fetchJson(url, { headers, signal }, [])
-  .then(formatReservationDate)
-  .then(formatReservationTime);
+    .then(formatReservationDate)
+    .then(formatReservationTime);
 };
 
 export async function listTables(signal){
