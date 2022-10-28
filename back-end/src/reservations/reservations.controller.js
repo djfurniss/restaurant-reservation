@@ -113,15 +113,14 @@ const reservationExists = async(req, res, next) => {
 const hasValidStatus = (req, res, next) => {
   const { status } = res.locals.reservation
   const { data = {} } = req.body
-  if (status == "finished"){
-    next({status: 400, message: "cannot update a finished table"})
-  };
- 
-  if (data.status == "booked" || data.status == "seated" || data.status == "finished"){
-    next();
-  };
 
-  next({status: 400, message: "unknown status"});
+  if (data.status === "cancelled"){
+    next();
+  }else if (status == "finished"){
+    next({status: 400, message: "cannot update a finished table"})
+  }else if (data.status == "booked" || data.status == "seated" || data.status == "finished"){
+    next();
+  }else next({status: 400, message: "unknown status"});
 };
 
 // --- router middleware ---
@@ -139,18 +138,6 @@ async function list(req, res) {
 async function create(req, res){
   const data = await service.create(req.body.data);
   res.status(201).json({ data});
-};
-
-/*
-  This update function is not made to be used. This is only tested in the backend. 
-  Whenever a reservation's status needs to be changed, an api call is made to /tables/:table_id/seat and those middware functions use the reservations service directly to modify the reservation's status.
-*/
-async function update(req, res, next){
-  const { status } = req.body.data
-  // having these lines in my code was throwing the tests even though I was not returning anything from it, simply declaring updatedRes was making the "returns 200 for status..." tests fail. Since this function is only to be tested and not used, I left it commented out. The service.update function here is what's directly imported into the tables controller as mentioned earlier. 
-  // const updatedRes = await service.update(reservation_id, status)
-  // const { reservation_id } = res.locals.reservation
-  res.json({data: {status}})
 };
 
 async function read(req, res, next){
@@ -184,6 +171,23 @@ async function read(req, res, next){
   };
 };
 
+async function update(req, res){
+  const { reservation_id } = res.locals.reservation
+  const data = await service.update(reservation_id, req.body.data)
+  res.json({ data })
+};
+
+/*
+  This update function is not made to be used. This is only tested in the backend. 
+  Whenever a reservation's status needs to be changed, an api call is made to /tables/:table_id/seat and those middware functions use the reservations service directly to modify the reservation's status.
+*/
+async function updateStatus(req, res){
+  const { status } = req.body.data
+  const { reservation_id } = res.locals.reservation
+  await service.updateStatus(reservation_id, status)
+  res.json({data: {status}})
+};
+
 module.exports = {
   list: asyncErrBoundary(list),
   create: [
@@ -198,8 +202,18 @@ module.exports = {
   ],
   update: [
     asyncErrBoundary(reservationExists),
-    hasValidStatus,
+    hasProperties,
+    hasValidNames,
+    hasValidPartySize,
+    hasValidMobileNumber,
+    hasValidResDate,
+    hasValidResTime,
     asyncErrBoundary(update)
+  ], 
+  updateStatus: [
+    asyncErrBoundary(reservationExists),
+    hasValidStatus,
+    asyncErrBoundary(updateStatus)
   ],
   read: asyncErrBoundary(read)
 };
