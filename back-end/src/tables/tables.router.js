@@ -1,5 +1,5 @@
 /**
- * Defines the router for reservation resources.
+ * Defines the router for table resources.
  *
  * @type {Router}
  */
@@ -16,3 +16,4 @@ router.route("/:table_id/seat")
     .delete(controller.delete)
  
  module.exports = router;
+ 
