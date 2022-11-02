@@ -17,7 +17,7 @@ import TableList from "../tables/TableList";
  */
 
 export default function Dashboard({date, setDate}) {
-// --- hooks / misc. ---
+// --- hooks, state, & misc. ---
   const query = useQuery();
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
@@ -27,23 +27,25 @@ export default function Dashboard({date, setDate}) {
   
 // --- useEffect ---
   useEffect(() => {
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsErr(null);
-    setTablesErr(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsErr);
-    listTables(abortController.signal)
-      .then(setTables)
-      .catch(setTablesErr);
-    return () => abortController.abort();
-  };
+    function loadDashboard() {
+      const abortController = new AbortController();
+    //clears any existing errors on page reload
+      setReservationsErr(null);
+      setTablesErr(null);
+      listReservations({ date }, abortController.signal)
+        .then(setReservations)
+        .catch(setReservationsErr);
+      listTables(abortController.signal)
+        .then(setTables)
+        .catch(setTablesErr);
+      return () => abortController.abort();
+    };
     
     // if the page is loaded with no query, one is generated with the default date
     if (!query.get("date")){
       query.set("date", date)
       // these two steps are taken to make sure the URL is updated and not just the value of the query
+      // essentially, a new window.location is made from the query and history is used to push to that "page"
       var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
       history.push(newRelativePathQuery);
     };
@@ -54,15 +56,17 @@ export default function Dashboard({date, setDate}) {
 
 // --- helper functions ---
   /**
-   * Since the query can be updated by changing state with clicking buttons OR by manually chaning the url, 
-   * this function is defined outside of the useEffect to be used in it but also to be used by any handlers that need to update the query
+   * Since the query can be updated by changing state with clicking buttons *OR* by manually chaning the url, 
+   * This function is used inside the useEffect but defined outside of it so that it can also be used by any handlers that need to update the query
    * 
    * @param {*} newDate 
+   * a date that date's state is going to change to
    */
   function updateQuery(newDate){
     query.set("date", newDate)
     setDate(query.get("date"))
     // these two steps are taken to make sure the URL is updated and not just the value of the query
+    // essentially, a new window.location is made from the new query and history is used to push to that "page"
     var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
     history.push(newRelativePathQuery);
   };
