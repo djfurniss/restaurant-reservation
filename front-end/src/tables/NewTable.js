@@ -28,30 +28,39 @@ export default function NewTable() {
 
 // --- return ---
     return (
-        <div>
+        <div className="container-fluid">
             {formErr ? <p className="alert alert-danger">{formErr}</p> : null}
             <form
                 onSubmit={handleSubmit}>
-                <label
-                    htmlFor="table_name">Table Name</label>
-                <input 
-                    name="table_name"
-                    type="text"
-                    value={tableData.table_name}
-                    onChange={handleInputChange}
-                    required/>
+                    <label
+                        htmlFor="table_name" 
+                        className="form-label">Table Name</label>
+                    <input 
+                        name="table_name"
+                        type="text"
+                        value={tableData.table_name}
+                        onChange={handleInputChange}
+                        required
+                        className="form-control"/>
+                    <label
+                        htmlFor="capacity" 
+                        className="form-label">Table Capacity</label>
 
-                <label
-                    htmlFor="capacity">Table Capacity</label>
-
-                <input 
-                    name="capacity"
-                    type="number"
-                    value={tableData.capacity}
-                    onChange={handleInputChange}
-                    required/>
-                <button type="submit">Add Table</button>
-                <button onClick={()=>history.go(-1)}>Cancel</button>
+                    <input 
+                        name="capacity"
+                        type="number"
+                        value={tableData.capacity}
+                        onChange={handleInputChange}
+                        required
+                        className="form-control"/>        
+                <div className="btn-group my-2" role="group">
+                    <button 
+                        type="submit" 
+                        className="btn btn-secondary">Add Table</button>
+                    <button 
+                        onClick={()=>history.go(-1)}
+                        className="btn btn-secondary">Cancel</button>
+                </div>
             </form>
         </div>
     )

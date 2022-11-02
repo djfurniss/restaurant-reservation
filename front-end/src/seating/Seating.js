@@ -47,16 +47,17 @@ export default function Seating() {
 
 // --- return ---
     return(
-        <div>
+        <div className="container-fluid">
             <h1>Seat reservation #{reservation_id}</h1>
             {seatErr ? <p className="alert alert-danger">{seatErr}</p> : null}
             <form
-                onSubmit={handleSubmit}>
-                <label>Select a table</label>
+                onSubmit={handleSubmit}
+                className="row row-cols-1 row-cols-md-2 align-items-center">
                 <select 
                     name="table_id"
                     onChange={handleInputChange}
-                    value={seatData}>
+                    value={seatData}
+                    className="form-control form-select col col-md-10">
                     <option value="">Choose a table</option>
                     {tables.map((table, _idx) => {
                         return <option
@@ -64,8 +65,14 @@ export default function Seating() {
                             value={table.table_id}>{table.table_name} - {table.capacity}</option>
                     })}
                 </select>
-                <button type="submit">Seat</button>
-                <button onClick={handleCancel}>Cancel</button>
+                <div className="btn-group my-2 col col-md-2" role="group">
+                    <button 
+                        type="submit" 
+                        className="btn btn-secondary">Seat</button>
+                    <button 
+                        onClick={handleCancel}
+                        className="btn btn-secondary">Cancel</button>
+                </div>
             </form>
         </div>
     )

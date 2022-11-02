@@ -16,19 +16,20 @@ export default function Search(){
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <div className="container-fluid mt-3">
+            <form onSubmit={handleSubmit} className="row justify-content-center my-3">
                 <input 
                     name="mobile_number"
                     value={number}
                     onChange={handleInputChange}
-                    placeholder="Enter a customer's phone number"/>
-                <button type="submit">Find</button>
+                    placeholder="Enter a customer's phone number"
+                    className="form-control w-50 mr-2"/>
+                <button type="submit" className="btn btn-secondary">Find</button>
             </form>
 
             {reservations.length ?
             <ListReservations reservations={reservations} purpose={"search"}/> :
-            <h1>No reservations found</h1>}
+            <p className="text-danger text-center">No reservations found</p>}
         </div>
     )
 };
