@@ -9,14 +9,16 @@ import ReservationsList from "../reservations/ReservationsList";
  */
 
 export default function Search(){
+// --- state --
     const [reservations, setReservations] = useState([]);
     const [reservationsErr, setReservationsErr] = useState(null);
-    const [number, setNumber] = useState("")
+    const [number, setNumber] = useState("");
 
+// --- handlers ---
     const handleInputChange = ({target: {value}}) => setNumber(value);
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         const abortController = new AbortController();
         findReservationByNumber(number, abortController.signal)
             .then(setReservations)
@@ -25,6 +27,7 @@ export default function Search(){
         return () => abortController.abort();
     };
 
+// --- return ---
     return (
         <div className="container-fluid mt-3">
             <ErrorAlert error={reservationsErr}/>
