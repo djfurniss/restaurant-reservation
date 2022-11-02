@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 export default function NewTable() {
-// --- hooks and misc. ---
+// --- hooks, state, and misc. ---
     const history = useHistory();
 
     const INITIAL_TABLE_DATA = {
@@ -19,19 +20,19 @@ export default function NewTable() {
         setTableData({...tableData, [target.name]: target.value})
     };
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const abortController = new AbortController();
-        await createTable(tableData, abortController.signal)
+        createTable(tableData, abortController.signal)
             .then(() => history.push("/"))
-            .catch(err => setFormErr(err.message))
+            .catch(setFormErr)
         return () => abortController.abort();
     };
 
 // --- return ---
     return (
         <div className="container-fluid">
-            {formErr ? <p className="alert alert-danger">{formErr}</p> : null}
+            <ErrorAlert error={formErr}/>
             <form
                 onSubmit={handleSubmit}>
                     <label

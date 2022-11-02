@@ -1,7 +1,7 @@
 const asyncErrBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
 const { read: reservationExists } = require("../reservations/reservations.controller");
-const { updateStatus: updateResStatus } = require("../reservations/reservations.service")
+const { updateStatus: updateResStatus } = require("../reservations/reservations.service");
 
 const REQUIRED_PROPERTIES = [
     "table_name", "capacity"

@@ -3,23 +3,18 @@ import { useHistory } from "react-router";
 import { today } from "../utils/date-time";
 
 export default function ReservationForm({
-    purpose, 
-    isTuesday, 
-    isInPast, 
+    purpose,
     formData, 
-    formErr, 
-    handleInputChange,
+    setFormData,
     handleSubmit}){
     const history = useHistory();
+
+    const handleInputChange = ({ target }) => {
+        setFormData({...formData, [target.name]: target.value});
+    };
+
     return (
         <div className="container-fluid">
-            {/*isTueday and isInPast only need to be rendered if it already isnt via formErr
-            the server returns identical error messages for the api
-            so in the catch, the same message will display as the formErr and
-            would be rendered more than once. This prevents that.*/}
-        {isTuesday && !formErr ? <p className="alert alert-danger">We are closed on Tuesdays, please select another day.</p> : null}
-        {isInPast && !formErr ? <p className="alert alert-danger">Please schedule a reservation at a future date.</p> : null}
-        {formErr ? <p className="alert alert-danger">{formErr}</p> : null}
             <form
                 onSubmit={handleSubmit}
                 className="row">
@@ -54,7 +49,6 @@ export default function ReservationForm({
                     type="date"
                     value={formData.reservation_date}
                     onChange={handleInputChange}
-                    min={today()}
                     required
                     className="form-control"/>
 

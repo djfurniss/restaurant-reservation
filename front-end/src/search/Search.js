@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { findReservationByNumber } from "../utils/api";
 import ReservationsList from "../reservations/ReservationsList";
+import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Search(){
     const [reservations, setReservations] = useState([]);
+    const [reservationsErr, setReservationsErr] = useState(null);
     const [number, setNumber] = useState("")
 
     const handleInputChange = ({target: {value}}) => setNumber(value);
@@ -14,11 +16,13 @@ export default function Search(){
         findReservationByNumber(number, abortController.signal)
             .then(setReservations)
             .then(()=>setNumber(""))
+            .catch(setReservationsErr)
         return () => abortController.abort();
     };
 
     return (
         <div className="container-fluid mt-3">
+            <ErrorAlert error={reservationsErr}/>
             <form onSubmit={handleSubmit} className="row justify-content-center my-3">
                 <input 
                     name="mobile_number"
@@ -29,9 +33,7 @@ export default function Search(){
                 <button type="submit" className="btn btn-secondary">Find</button>
             </form>
 
-            {reservations.length ?
-            <ReservationsList reservations={reservations} purpose={"search"}/> :
-            <p className="text-danger text-center">No reservations found</p>}
+            <ReservationsList reservations={reservations} purpose={"search"}/>
         </div>
     )
 };

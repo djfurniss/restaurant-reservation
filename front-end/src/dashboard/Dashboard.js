@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { listReservations, listTables } from "../utils/api";
+import useQuery from "../utils/useQuery";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
-import TableList from "../tables/TableList"
-import useQuery from "../utils/useQuery";
+import TableList from "../tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -12,38 +12,41 @@ import useQuery from "../utils/useQuery";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({date, setDate, today, previous, next}) {
+export default function Dashboard({date, setDate, today, previous, next}) {
 // --- hooks / misc. ---
   const query = useQuery();
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
+  const [reservationsErr, setReservationsErr] = useState(null);
   const [tables, setTables] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [tablesErr, setTablesErr] = useState(null);
   
 // --- useEffect ---
-useEffect(() => {
+  useEffect(() => {
   function loadDashboard() {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setReservationsErr(null);
+    setTablesErr(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setReservationsErr);
     listTables(abortController.signal)
       .then(setTables)
+      .catch(setTablesErr);
     return () => abortController.abort();
   };
-  
-  // if the page is loaded with no query, one is generated with the default date
-  if (!query.get("date")){
-    query.set("date", date)
-    // these two steps are taken to make sure the URL is updated and not just the value of the query
-    var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
-    history.push(newRelativePathQuery);
-  };
-  // otherwise, if there's a date in the query that's not the default date, this function will make sure the date state is updated to the date that's manually typed in the query
-  updateQuery(query.get("date"));
-  loadDashboard();
-}, [date]); 
+    
+    // if the page is loaded with no query, one is generated with the default date
+    if (!query.get("date")){
+      query.set("date", date)
+      // these two steps are taken to make sure the URL is updated and not just the value of the query
+      var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
+      history.push(newRelativePathQuery);
+    };
+    // otherwise, if there's a date in the query that's not the default date, this function will make sure the date state is updated to the date that's manually typed in the query
+    updateQuery(query.get("date"));
+    loadDashboard();
+  }, [date]); 
 
 // --- helper functions ---
   /**
@@ -52,19 +55,18 @@ useEffect(() => {
    * 
    * @param {*} newDate 
    */
-function updateQuery (newDate) {
-  query.set("date", newDate)
-  setDate(query.get("date"))
-  // these two steps are taken to make sure the URL is updated and not just the value of the query
-  var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
-  history.push(newRelativePathQuery);
-};
+  function updateQuery(newDate){
+    query.set("date", newDate)
+    setDate(query.get("date"))
+    // these two steps are taken to make sure the URL is updated and not just the value of the query
+    var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
+    history.push(newRelativePathQuery);
+  };
     
 // --- return ---
   return (
     <main className="container-fluid">
       <h1>Reservations for {date}</h1>
-      <ErrorAlert error={reservationsError} />
 
       <div className="btn-group" role="group">
         <button 
@@ -78,18 +80,15 @@ function updateQuery (newDate) {
           className="btn btn-secondary">Next Day</button>
       </div>
 
-      {reservations.length ?
-      <ReservationsList reservations={reservations} purpose={"dashboard"}/> :
-      <p className="text-danger">No reservations</p>}
+      <ErrorAlert error={reservationsErr} />
+      <ReservationsList reservations={reservations} purpose={"dashboard"}/>
 
       <h1 className="mt-5">Tables</h1>
+      <ErrorAlert error={tablesErr} />
       {tables.length ?
       <TableList tables={tables}/> :
       <h2>No tables</h2>
       }
-
     </main>
   );
 };
-
-export default Dashboard;

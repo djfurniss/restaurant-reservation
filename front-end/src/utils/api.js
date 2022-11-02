@@ -122,8 +122,6 @@ export async function updateStatus(reservation_id, status, signal){
   };
 
   return await fetchJson(url, options, [])
-  .then(formatReservationDate)
-  .then(formatReservationTime);
 };
 
 export async function findReservationByNumber(mobile_number, signal){

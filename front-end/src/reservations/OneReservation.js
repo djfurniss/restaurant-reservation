@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { updateStatus } from "../utils/api";
+// import { updateStatus } from "../utils/api";
 
-export default function OneReservation({ resv, purpose }){
+export default function OneReservation({ resv, purpose, handleCancel }){
     const history = useHistory();
+    // const [reservationErr, setReservationErr] = useState(null)
 
     return (
         purpose === "dashboard" && resv.status === "finished" || resv.status === "cancelled" ? null :
@@ -37,8 +38,7 @@ export default function OneReservation({ resv, purpose }){
                         <button 
                             onClick={()=>{
                                 window.confirm("Do you want to cancel this reservation? This cannot be undone.") 
-                                && updateStatus(resv.reservation_id, "cancelled") 
-                                && history.go(0)
+                                && handleCancel()
                             }}
                             data-reservation-id-cancel={resv.reservation_id}
                             className="btn btn-sm btn-danger">Cancel</button>

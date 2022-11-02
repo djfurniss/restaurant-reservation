@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { listTables, seat } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Seating() {
 // --- hooks, state, misc. ---
     const history = useHistory();
     const [tables, setTables] = useState([]);
+    const [tablesErr, setTablesErr] = useState(null);
     const [seatData, setSeatData] = useState("");
     const [seatErr, setSeatErr] = useState(null);
     const { reservation_id } = useParams();
@@ -15,8 +17,8 @@ export default function Seating() {
         function getTables(){
             const abortController = new AbortController();
             listTables(abortController.signal)
-            .then(setTables)
-            .catch(err => setSeatErr(err.message))
+                .then(setTables)
+                .catch(setTablesErr)
             return () => abortController.abort();
         };
 
@@ -32,11 +34,11 @@ export default function Seating() {
         e.preventDefault();
         const abortController = new AbortController();
         seat(reservation_id, seatData, abortController.signal)
-            .then(async () => {
+            .then(() => {
                 history.push("/dashboard")
                 setSeatData("")
             })
-            .catch(err => setSeatErr(err.message))
+            .catch(setSeatErr)
         return () => abortController.abort()
     };
 
@@ -49,7 +51,8 @@ export default function Seating() {
     return(
         <div className="container-fluid">
             <h1>Seat reservation #{reservation_id}</h1>
-            {seatErr ? <p className="alert alert-danger">{seatErr}</p> : null}
+            <ErrorAlert error={tablesErr}/>
+            <ErrorAlert error={seatErr}/>
             <form
                 onSubmit={handleSubmit}
                 className="row row-cols-1 row-cols-md-2 align-items-center">
