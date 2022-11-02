@@ -34,7 +34,7 @@ export default function ReservationsList({ reservations, purpose }){
                                 .then(()=>history.go("/"))
                             .catch(setStatusErr)
                         }}/>
-                }): null}
+                }): <p>No reservations found</p>}
                 </tbody>
             </table>
         </div>
