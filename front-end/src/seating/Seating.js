@@ -40,11 +40,11 @@ export default function Seating() {
         const abortController = new AbortController();
         seat(reservation_id, seatData, abortController.signal)
             .then(() => {
-                history.push("/dashboard")
-                setSeatData("")
+                history.push("/dashboard");
+                setSeatData("");
             })
             .catch(setSeatErr)
-        return () => abortController.abort()
+        return () => abortController.abort();
     };
 
     const handleCancel = (e) => {
@@ -67,7 +67,7 @@ export default function Seating() {
                     value={seatData}
                     className="form-control form-select col col-md-10">
                     <option value="">Choose a table</option>
-                    {tables.map((table, _idx) => {
+                    {tables.map((table) => {
                         return <option
                             key={table.table_id}
                             value={table.table_id}>{table.table_name} - {table.capacity}</option>
