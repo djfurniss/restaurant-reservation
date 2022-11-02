@@ -15,17 +15,16 @@ import { useHistory } from "react-router";
  */
 
 export default function ReservationForm({purpose, formData, setFormData, handleSubmit}){
+// --- hooks ---
     const history = useHistory();
+    
+// --- handler ---
+    const handleInputChange = ({ target }) => setFormData({...formData, [target.name]: target.value});
 
-    const handleInputChange = ({ target }) => {
-        setFormData({...formData, [target.name]: target.value});
-    };
-
+// --- return ---
     return (
         <div className="container-fluid">
-            <form
-                onSubmit={handleSubmit}
-                className="row">
+            <form onSubmit={handleSubmit} className="row">
                 <label htmlFor="first_name" className="form-label">First name</label>
                 <input
                     name="first_name"
