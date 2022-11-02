@@ -95,7 +95,7 @@ export default function Dashboard({date, setDate}) {
       <ErrorAlert error={tablesErr} />
       {tables.length ?
       <TableList tables={tables}/> :
-      <h2>No tables</h2>
+      <p>No tables</p>
       }
     </main>
   );
