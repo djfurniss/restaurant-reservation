@@ -5,9 +5,20 @@ const { updateStatus: updateResStatus } = require("../reservations/reservations.
 
 // --- validation middleware ---
     const REQUIRED_PROPERTIES = ["table_name", "capacity"];
+    
+    //makes sure req.body.data has all of the required properties to define a table
+    const hasProperties = (req, res, next) => {
+        const { data = {}} = req.body;
+        for (let property of REQUIRED_PROPERTIES){
+            if (!data.hasOwnProperty(property)){
+                next({status: 400, message: `${property} is required`})
+            };
+        };
+        next();
+    };
 
+    // makes sure data object is in the body and it has a reservation_id to work with
     const hasValidData = (req, res, next) => {
-        // checks to see if the request body has data and if that data has the reservation_id
         if (!req.body.data) {
             next({status: 400, message:"request body data is missing"});
         };
@@ -26,6 +37,22 @@ const { updateStatus: updateResStatus } = require("../reservations/reservations.
         } else next({status: 404, message: `table with id ${table_id} does not exist`});
     };
 
+    const hasValidName = (req, res, next) => {
+        const { table_name } = req.body.data;
+        if (table_name.length < 2){
+            next({status: 400, message: "table_name must be at least 2 characters."});
+        };
+        next();
+    };
+
+    // makes sure when a table is created, it's capacity is a number and is > 0
+    const hasValidCapacity = (req, res, next) => {
+        const { capacity } = req.body.data;
+        if (typeof capacity != "number") next({status: 400, message:"capacity must be a number"});
+        if (capacity <=0 ) next({status: 400, message: "capacity must be greater than 0"});
+        next();
+    };
+
     // makes sure a table is occupied before removing a reservation assignment
     const isOccupied = (req, res, next) => {
         const { reservation_id } = res.locals.table;
@@ -35,6 +62,7 @@ const { updateStatus: updateResStatus } = require("../reservations/reservations.
         next();
     };
 
+    // makes sure a tables capacity can fit a number of people
     const canSeatParty = async(req, res, next) => {
     // after validating that the table exists, the table can be accessed through res locals
         const { capacity } = res.locals.table;
@@ -54,68 +82,39 @@ const { updateStatus: updateResStatus } = require("../reservations/reservations.
         next();
     };
 
-    const hasProperties = (req, res, next) => {
-        const { data = {}} = req.body;
-        for (let prop of REQUIRED_PROPERTIES){
-            if (!data.hasOwnProperty(prop)){
-                next({status: 400, message: `${prop} is required`})
-            };
-        };
-        next();
-    };
-
-    const hasValidName = (req, res, next) => {
-        const { table_name } = req.body.data;
-        if (table_name.length < 2){
-            next({status: 400, message: "table_name must be at least 2 characters."});
-        };
-        next();
-    };
-
-    const hasValidCapacity = (req, res, next) => {
-        const { capacity } = req.body.data;
-        if (typeof capacity != "number") next({status: 400, message:"capacity must be a number"});
-        if (capacity <=0 ) next({status: 400, message: "capacity must be greater than 0"});
-        next();
-    };
-
 // --- router level middleware ---
-    async function list (req, res) {
-        const data  = await service.list();
-        res.json({ data });
-    };
-
     async function create (req, res) {
-        const data = await service.create(req.body.data);
-        res.status(201).json({ data });
+            const data = await service.create(req.body.data);
+            res.status(201).json({ data });
     };
 
     async function update (req, res) {
-        // the table_id from params goes through verification and is assigned into locals if it's valid and exists
+        // the table_id from params goes through verification and is assigned into res.locals if it's valid and exists
         const { table_id } = res.locals.table;
-        // the reservation from the request body also goes through verification and is assigned to locals if it's valid and exists
+        // the reservation from the request body also goes through verification and is assigned into res.locals if it's valid and exists
         const { reservation_id } = res.locals.reservation;
-        // once everything goes through validation, the update service is called
-        // await updateResStatus(reservation_id)
+        // update the table's reservation_id assignment
         const updatedTable = await service.update(table_id, reservation_id);
-        // ? the tests don't make their own api call to /reservation/:reservation_id/status so I had to import the service function from the reservations.service into this one api call to update the reservation's status
+        // ! the tests don't make their own api call to /reservation/:reservation_id/status so I had to import the service function from the reservations.service into this api call to update the reservation's status
         await updateResStatus(reservation_id, "seated");
         // the table is returned with the updated information
         res.json({data: updatedTable});
-        // next();
     };
 
     async function destroy (req, res) {
         const { table_id, reservation_id } = res.locals.table;
         await updateResStatus(reservation_id, "finished");
         await service.finishTable(table_id);
-        // res.sendStatus(204)
-        res.json({data: "done!"});
+        res.sendStatus(200);
+    };
+
+    async function list (req, res) {
+        const data  = await service.list();
+        res.json({ data });
     };
 
 // --- exports ---
 module.exports = {
-    list: asyncErrBoundary(list),
     create: [
         hasProperties,
         hasValidName,
@@ -132,5 +131,6 @@ module.exports = {
         asyncErrBoundary(tableExists),
         isOccupied,
         asyncErrBoundary(destroy)
-    ]
+    ],
+    list: asyncErrBoundary(list),
 };
