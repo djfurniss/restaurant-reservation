@@ -1,18 +1,18 @@
-const knex = require("../db/connection")
+const knex = require("../db/connection");
 
 function list(reservation_date){
     return knex("reservations")
     .select("*")
     .where({ reservation_date })
     .whereNot("status", "finished")
-    .orderBy("reservation_time")
+    .orderBy("reservation_time");
 };
 
 function create(newReservation){
     return knex("reservations")
     .insert(newReservation)
     .returning("*")
-    .then(createdReservation => createdReservation[0])
+    .then(createdReservation => createdReservation[0]);
 };
 
 function read(reservation_id){
@@ -20,7 +20,7 @@ function read(reservation_id){
     .select("*")
     .where({ reservation_id })
     .returning("*")
-    .then(foundRes => foundRes[0])
+    .then(foundRes => foundRes[0]);
 };
 
 function update(reservation_id, updatedInfo){
@@ -28,7 +28,7 @@ function update(reservation_id, updatedInfo){
     .select("*")
     .where({reservation_id})
     .update(updatedInfo, "*")
-    .then(updatedReservation => updatedReservation[0])
+    .then(updatedReservation => updatedReservation[0]);
 };
 
 function updateStatus(reservation_id, status){
@@ -37,7 +37,7 @@ function updateStatus(reservation_id, status){
     .where({reservation_id})
     .update({status})
     .returning("*")
-    .then(updatedRes => updatedRes[0])
+    .then(updatedRes => updatedRes[0]);
 };
 
 function findByNumber(mobile_number){
