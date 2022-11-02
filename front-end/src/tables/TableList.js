@@ -3,11 +3,12 @@ import OneTable from "../tables/OneTable";
 export default function TableList ({ tables }) {
     return (
         <div>
-            <table>
+            <table className="table table-striped table-borderless">
                 <thead>
                     <tr>
-                        <td>Table</td>
-                        <td>Capacity</td>
+                        <th scope="col">Table</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Availability</th>
                     </tr>
                 </thead>
                 <tbody>

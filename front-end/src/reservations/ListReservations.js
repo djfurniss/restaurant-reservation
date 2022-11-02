@@ -3,15 +3,15 @@ import OneReservation from "./OneReservation"
 
 export default function ListReservations({ reservations, purpose }){
     return (
-        <table>
-            <thead>
+        <table className="table table-striped table-borderless">
+            <thead className="table-light">
                 <tr>
-                <th>Reservation Name</th>
-                <th>Phone</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Party Size</th>
-                <th>Status</th>
+                <th scope="col">Reservation Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Party Size</th>
+                <th scope="col">Status</th>
                 </tr>
             </thead>
             

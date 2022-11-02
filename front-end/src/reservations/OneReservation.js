@@ -7,36 +7,42 @@ export default function OneReservation({ resv, purpose }){
     return (
         purpose === "dashboard" && resv.status === "finished" || resv.status === "cancelled" ? null :
         <tr>
-            <td>{`${resv.first_name} ${resv.last_name}`}</td>
+            <td scope="row">{`${resv.first_name} ${resv.last_name}`}</td>
             <td>{resv.mobile_number}</td>
             <td>{resv.reservation_date}</td>
             <td>{resv.reservation_time}</td>
             <td>{resv.people}</td>
-            <td data-reservation-id-status={resv.reservation_id} >{resv.status}</td>
-            {resv.status === "booked" &&
+            <td data-reservation-id-status={resv.reservation_id}>{resv.status}</td>
             <td>
-                <button 
-                    onClick={()=>history.push(`/reservations/${resv.reservation_id}/seat`)}
-                    href={`/reservations/${resv.reservation_id}/seat`}>
-                    Seat
-                </button>
-            </td>}
-            {resv.status === "booked" &&
-             <td>
-                <button 
-                    onClick={()=>history.push(`/reservations/${resv.reservation_id}/edit`)}
-                    href={`/reservations/${resv.reservation_id}/edit`}>
-                    Edit
-                    </button>
-            </td>}
-            <td>
-                <button 
-                    onClick={()=>{
-                        window.confirm("Do you want to cancel this reservation? This cannot be undone.") 
-                        && updateStatus(resv.reservation_id, "cancelled") 
-                        && history.go(0)
-                    }}
-                    data-reservation-id-cancel={resv.reservation_id}>Cancel</button>
+                <div className="btn-group mx-3" role="group">
+                    {resv.status === "booked" &&
+                        <button 
+                            onClick={()=>history.push(`/reservations/${resv.reservation_id}/seat`)}
+                            href={`/reservations/${resv.reservation_id}/seat`}
+                            className="btn btn-sm btn-secondary">
+                            Seat
+                        </button>
+                    }
+                    {resv.status === "booked" &&
+                    
+                        <button 
+                            onClick={()=>history.push(`/reservations/${resv.reservation_id}/edit`)}
+                            href={`/reservations/${resv.reservation_id}/edit`}
+                            className="btn btn-sm btn-secondary">
+                            Edit
+                            </button>
+                    }
+                    
+                        <button 
+                            onClick={()=>{
+                                window.confirm("Do you want to cancel this reservation? This cannot be undone.") 
+                                && updateStatus(resv.reservation_id, "cancelled") 
+                                && history.go(0)
+                            }}
+                            data-reservation-id-cancel={resv.reservation_id}
+                            className="btn btn-sm btn-danger">Cancel</button>
+                    
+                </div>
             </td>
         </tr>
     )

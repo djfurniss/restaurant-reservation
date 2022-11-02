@@ -12,19 +12,20 @@ export default function OneTable ({ table }) {
 
     return (
         <tr>
-            <td>{table.table_name}</td>
+            <td scope="row">{table.table_name}</td>
             <td>{table.capacity}</td>
             <td data-table-id-status={table.table_id}>
                 {table.reservation_id ? "Occupied" : "Free"}
             </td>
-            {table.reservation_id && 
             <td>
-                <button 
+            {table.reservation_id 
+                ? <button 
                     onClick={handleFinish}
                     data-table-id-finish={table.table_id}
-                    >finish
-                </button>
-            </td>}
+                    className="btn btn-sm btn-secondary">finish
+                </button> 
+                : null}
+            </td>
         </tr>
     )
 };

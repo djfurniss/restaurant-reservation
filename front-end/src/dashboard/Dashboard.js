@@ -62,23 +62,27 @@ function updateQuery (newDate) {
     
 // --- return ---
   return (
-    <main>
-      <h1>Dashboard</h1>
+    <main className="container-fluid">
+      <h1>Reservations for {date}</h1>
       <ErrorAlert error={reservationsError} />
 
-      <button onClick={()=>updateQuery(previous(date))}>Previous Day</button>
-      <button onClick={()=>updateQuery(today())}>Today</button>
-      <button onClick={()=>updateQuery(next(date))}>Next Day</button>
-
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div className="btn-group" role="group">
+        <button 
+          onClick={()=>updateQuery(previous(date))}
+          className="btn btn-secondary">Previous Day</button>
+        <button 
+          onClick={()=>updateQuery(today())}
+          className="btn btn-secondary">Today</button>
+        <button 
+          onClick={()=>updateQuery(next(date))}
+          className="btn btn-secondary">Next Day</button>
       </div>
 
       {reservations.length ?
       <ListReservations reservations={reservations} purpose={"dashboard"}/> :
-      <h1>No reservations</h1>}
+      <p className="text-danger">No reservations</p>}
 
-      <h1>Tables</h1>
+      <h1 className="mt-5">Tables</h1>
       {tables.length ?
       <TableList tables={tables}/> :
       <h2>No tables</h2>
