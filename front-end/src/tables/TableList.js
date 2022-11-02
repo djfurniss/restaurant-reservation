@@ -28,7 +28,7 @@ export default function TableList ({ tables }) {
                 <tbody>
                     {tables.map((table) => {
                        return <OneTable 
-                        key={table.id} 
+                        key={table.table_id} 
                         table={table} 
                         handleFinish={handleFinish}/>
                     })}
