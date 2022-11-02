@@ -44,7 +44,8 @@ export default function NewReservation({ setDate, today }){
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createReservation(formData)
+        const abortController = new AbortController();
+        await createReservation(formData, abortController.signal)
             .then(newRes => {
                 //use the date setter to set the date state to the newly created reservation's date so when the user is pushed back to the dashboard, it loads with the date of the new reservation.
                 setDate(newRes.reservation_date)
@@ -55,6 +56,7 @@ export default function NewReservation({ setDate, today }){
                 // the api returns any errors and setFormErr changes state so that the error messages are rendered
                 setFormErr(err.message)
             })
+        return () => abortController.abort();
     };
 
 // --- return ---

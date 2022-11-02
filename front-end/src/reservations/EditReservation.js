@@ -13,18 +13,18 @@ export default function EditReservation({ setDate, today }){
     const [isInPast, setIsInPast] = useState(false);
 // --- useEffect ---
     useEffect(()=>{
-        // TODO : abort controller
-        readReservation(reservation_id)
+        const abortController = new AbortController();
+        readReservation(reservation_id, abortController.signal)
             .then(({ first_name, last_name, mobile_number, reservation_date, reservation_time, people }) => {
                 setFormData({first_name, last_name, mobile_number, reservation_date, reservation_time, people})
             })
             .catch(setFormErr)
+        return () => abortController.abort();
     }, [reservation_id]);
 
 // --- handlers ---
     const handleInputChange = ({ target }) => {
         setFormData({...formData, [target.name]: target.value});
-
         // specifcallly checks the reservation date as it changes
         if (target.name === "reservation_date"){
         // renders the error message if user selects a date before the current date
@@ -40,19 +40,28 @@ export default function EditReservation({ setDate, today }){
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await updateReservation(formData, reservation_id)
+        const abortController = new AbortController();
+        await updateReservation(formData, reservation_id, abortController.signal)
             .then(({ reservation_date })=> {
                 setDate(reservation_date)
                 history.push("/")
             })
             .catch(({message}) => setFormErr(message))
+        return () => abortController.abort();
     };
 
 // --- return ---
     return (
         <div>
             <h1>Editing reservation #{reservation_id}</h1>
-            <ReservationForm purpose="edit" isTuesday={isTuesday} isInPast={isInPast} formData={formData} formErr={formErr} handleInputChange={handleInputChange} handleSubmit={handleSubmit}/>
+            <ReservationForm 
+                purpose="edit" 
+                isTuesday={isTuesday} 
+                isInPast={isInPast} 
+                formData={formData} 
+                formErr={formErr} 
+                handleInputChange={handleInputChange} 
+                handleSubmit={handleSubmit}/>
         </div>
     )
 };

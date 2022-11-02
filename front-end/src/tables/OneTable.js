@@ -1,5 +1,6 @@
+import React from "react";
 import { useHistory } from "react-router";
-import { finishTable, updateResStatus } from "../utils/api";
+import { finishTable } from "../utils/api";
 
 export default function OneTable ({ table }) {
     const history = useHistory();

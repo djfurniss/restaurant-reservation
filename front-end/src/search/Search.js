@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { findReservationByNumber } from "../utils/api";
-import ListReservations from "../reservations/ListReservations";
+import ReservationsList from "../reservations/ReservationsList";
 
 export default function Search(){
     const [reservations, setReservations] = useState([]);
@@ -10,9 +10,11 @@ export default function Search(){
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        findReservationByNumber(number)
+        const abortController = new AbortController();
+        findReservationByNumber(number, abortController.signal)
             .then(setReservations)
             .then(()=>setNumber(""))
+        return () => abortController.abort();
     };
 
     return (
@@ -28,7 +30,7 @@ export default function Search(){
             </form>
 
             {reservations.length ?
-            <ListReservations reservations={reservations} purpose={"search"}/> :
+            <ReservationsList reservations={reservations} purpose={"search"}/> :
             <p className="text-danger text-center">No reservations found</p>}
         </div>
     )

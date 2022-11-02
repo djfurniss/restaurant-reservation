@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { listTables, seat, updateResStatus } from "../utils/api";
+import { listTables, seat } from "../utils/api";
 
 export default function Seating() {
 // --- hooks, state, misc. ---

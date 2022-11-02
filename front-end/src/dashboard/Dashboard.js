@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import ListReservations from "../reservations/ListReservations";
+import ReservationsList from "../reservations/ReservationsList";
 import TableList from "../tables/TableList"
 import useQuery from "../utils/useQuery";
 
@@ -79,7 +79,7 @@ function updateQuery (newDate) {
       </div>
 
       {reservations.length ?
-      <ListReservations reservations={reservations} purpose={"dashboard"}/> :
+      <ReservationsList reservations={reservations} purpose={"dashboard"}/> :
       <p className="text-danger">No reservations</p>}
 
       <h1 className="mt-5">Tables</h1>
