@@ -12,13 +12,15 @@ import OneTable from "../tables/OneTable";
  */
 
 export default function TableList ({ tables }) {
+// --- state & hooks ---
     const history = useHistory();
-    const [finishErr, setFinishErr] = useState(null)
+    const [finishErr, setFinishErr] = useState(null);
 
+// --- handler ---
     const handleFinish = (table_id) => {
         window.confirm("Is this table ready to seat new guests?") && 
         finishTable(table_id).catch(setFinishErr) && 
-        history.go(0)
+        history.go(0);
     };
 
     return (
