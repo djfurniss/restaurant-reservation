@@ -20,12 +20,11 @@ export default function OneTable ({ table, handleFinish }) {
             </td>
             <td>
             {table.reservation_id 
-                ? <button 
-                    onClick={()=>handleFinish(table.table_id)}
-                    data-table-id-finish={table.table_id}
-                    className="btn btn-sm btn-secondary">finish
-                </button> 
-                : null}
+            ? <button 
+                onClick={()=>handleFinish(table.table_id)}
+                data-table-id-finish={table.table_id}
+                className="btn btn-sm btn-secondary">finish</button> 
+            : null}
             </td>
         </tr>
     )
