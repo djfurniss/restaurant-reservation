@@ -1,11 +1,20 @@
 import React from "react";
 import { useHistory } from "react-router";
 
-export default function ReservationForm({
-    purpose,
-    formData, 
-    setFormData,
-    handleSubmit}){
+/**
+ * Responsible for rendering a form used both by the NewReservation and the EditReservation page
+ * @param purpose
+ * a string passed from it's parent component to specify what it needs to do or not do
+ * @param formData
+ * the form information passed from either NewReservation or EditReservation page
+ * @param setFormData
+ * makes state changes to formData
+ * @param handleSubmit
+ * a reference to a function from the parent component (either creates new reservation or updates an existing one)
+ * @returns {JSX.Element}
+ */
+
+export default function ReservationForm({purpose, formData, setFormData, handleSubmit}){
     const history = useHistory();
 
     const handleInputChange = ({ target }) => {

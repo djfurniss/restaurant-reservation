@@ -4,7 +4,14 @@ import { readReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 
-export default function EditReservation({ setDate, today }){
+/**
+ * Defines the /reservations/:reservation_id/edit page.
+ * @param setDate 
+ * a function to change the state of date
+ * @returns {JSX.Element}
+ */
+
+export default function EditReservation({ setDate }){
 // --- hooks, state, & misc. ---
     const { reservation_id } = useParams();
     const history = useHistory();

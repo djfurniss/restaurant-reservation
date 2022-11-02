@@ -1,5 +1,15 @@
 import React from "react";
 
+/**
+ * Responsible for rendering information for one table
+ * @param table 
+ * a single table
+ * @param handleFinish 
+ * a reference to a function that ends seating for a given table
+ * @returns {JSX.Element}
+ * a table row to be rendered into a tbody in TableList
+ */
+
 export default function OneTable ({ table, handleFinish }) {
     return (
         <tr>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { today, previous, next } from "../utils/date-time";
+import { today } from "../utils/date-time";
 import Dashboard from "../dashboard/Dashboard";
 import NewReservation from "../reservations/NewReservation";
 import EditReservation from "../reservations/EditReservation";
@@ -19,20 +19,17 @@ export default function Routes() {
       </Route>
       <Route path="/dashboard">
         <Dashboard 
-          date={date} 
-          setDate={setDate} 
-          today={today} 
-          previous={previous} 
-          next={next}/>
+          date={date}
+          setDate={setDate}/>
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/seat">
         <Seating/>
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/edit">
-       <EditReservation setDate={setDate} today={today}/>
+       <EditReservation setDate={setDate}/>
       </Route>
       <Route exact={true} path="/reservations/new">
-        <NewReservation setDate={setDate} today={today}/>
+        <NewReservation setDate={setDate}/>
       </Route>
       <Route exact={true} path="/tables/new">
         <NewTable />

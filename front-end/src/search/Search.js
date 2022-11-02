@@ -3,6 +3,11 @@ import { findReservationByNumber } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 
+/**
+ * Defines the /search page
+ * @returns {JSX.Element}
+ */
+
 export default function Search(){
     const [reservations, setReservations] = useState([]);
     const [reservationsErr, setReservationsErr] = useState(null);

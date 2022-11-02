@@ -3,6 +3,11 @@ import { useHistory, useParams } from "react-router";
 import { listTables, seat } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * Defines the /reservations/:reservation_id/seat page
+ * @returns {JSX.Element}
+ */
+
 export default function Seating() {
 // --- hooks, state, misc. ---
     const history = useHistory();
@@ -64,7 +69,7 @@ export default function Seating() {
                     <option value="">Choose a table</option>
                     {tables.map((table, _idx) => {
                         return <option
-                            key={_idx}
+                            key={table.table_id}
                             value={table.table_id}>{table.table_name} - {table.capacity}</option>
                     })}
                 </select>

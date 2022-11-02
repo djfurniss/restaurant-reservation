@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * Defines the /tables/new page
+ * @returns {JSX.Element}
+ */
+
 export default function NewTable() {
 // --- hooks, state, and misc. ---
     const history = useHistory();

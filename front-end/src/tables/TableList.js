@@ -4,6 +4,13 @@ import { finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import OneTable from "../tables/OneTable";
 
+/**
+ * Responsible for rendering a list of tables
+ * @param tables 
+ * an array of tables passed from Dashboard
+ * @returns {JSX.Element}
+ */
+
 export default function TableList ({ tables }) {
     const history = useHistory();
     const [finishErr, setFinishErr] = useState(null)

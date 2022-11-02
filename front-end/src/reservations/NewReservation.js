@@ -4,7 +4,13 @@ import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 
-export default function NewReservation({ setDate, today }){
+/**
+ * Defines the /reservations/new page
+ * @param setDate 
+ * a function to change the state of date
+ * @returns {JSX.Element}
+ */
+export default function NewReservation({ setDate }){
 // --- hooks, state, & misc. ---
     const history = useHistory();
 

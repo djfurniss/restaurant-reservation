@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { today, previous, next } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -7,12 +8,15 @@ import ReservationsList from "../reservations/ReservationsList";
 import TableList from "../tables/TableList";
 
 /**
- * Defines the dashboard page.
+ * Defines the /dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
+ * @param setDate 
+ * a function to change the state of date
  * @returns {JSX.Element}
  */
-export default function Dashboard({date, setDate, today, previous, next}) {
+
+export default function Dashboard({date, setDate}) {
 // --- hooks / misc. ---
   const query = useQuery();
   const history = useHistory();

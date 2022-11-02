@@ -4,6 +4,15 @@ import { updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import OneReservation from "./OneReservation"
 
+/**
+ * Renders a list of reservations 
+ * @param reservations
+ * an array of reservations passed from either Dashboard page or Search
+ * @param purpose
+ * a string passed from it's parent component to know what it needs to do or not do
+ * @returns {JSX.Element}
+ */
+
 export default function ReservationsList({ reservations, purpose }){
     const history = useHistory();
     const [statusErr, setStatusErr] = useState(null)
