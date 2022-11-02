@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { updateStatus } from "../utils/api";
-import OneReservation from "./OneReservation"
 import ErrorAlert from "../layout/ErrorAlert";
+import OneReservation from "./OneReservation"
 
 export default function ReservationsList({ reservations, purpose }){
     const history = useHistory();

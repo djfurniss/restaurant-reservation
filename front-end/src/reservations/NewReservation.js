@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-import { getDay } from "../utils/date-time";
-import ReservationForm from "./ReservationForm";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "./ReservationForm";
 
 export default function NewReservation({ setDate, today }){
 // --- hooks, state, & misc. ---

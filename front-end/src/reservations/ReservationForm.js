@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router";
-import { today } from "../utils/date-time";
 
 export default function ReservationForm({
     purpose,

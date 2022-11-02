@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 import TableList from "../tables/TableList";

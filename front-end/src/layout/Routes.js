@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { today, previous, next } from "../utils/date-time";
 import Dashboard from "../dashboard/Dashboard";
 import NewReservation from "../reservations/NewReservation";
 import EditReservation from "../reservations/EditReservation";
@@ -7,10 +8,8 @@ import NewTable from "../tables/NewTable";
 import Seating from "../seating/Seating";
 import Search from "../search/Search";
 import NotFound from "./NotFound";
-import { today, previous, next } from "../utils/date-time";
 
-function Routes() {
-
+export default function Routes() {
   const [date, setDate] = useState(today())
 
   return (
@@ -46,6 +45,4 @@ function Routes() {
       </Route>
     </Switch>
   );
-}
-
-export default Routes;
+};

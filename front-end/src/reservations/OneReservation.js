@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
-// import { updateStatus } from "../utils/api";
 
 export default function OneReservation({ resv, purpose, handleCancel }){
     const history = useHistory();
-    // const [reservationErr, setReservationErr] = useState(null)
 
     return (
         purpose === "dashboard" && resv.status === "finished" || resv.status === "cancelled" ? null :
