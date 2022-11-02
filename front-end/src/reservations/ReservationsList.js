@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import OneReservation from "./OneReservation"
+import OneReservation from "./OneReservation";
 
 /**
  * Renders a list of reservations 
@@ -14,9 +14,11 @@ import OneReservation from "./OneReservation"
  */
 
 export default function ReservationsList({ reservations, purpose }){
+// --- hooks and state ---
     const history = useHistory();
-    const [statusErr, setStatusErr] = useState(null)
+    const [statusErr, setStatusErr] = useState(null);
 
+// ---return ---
     return (
         <div>
             <ErrorAlert error={statusErr}/>
@@ -33,7 +35,8 @@ export default function ReservationsList({ reservations, purpose }){
                 </thead>
                 
                 <tbody>
-                {reservations.length ? reservations.map(resv => {
+                {reservations.length 
+                ? reservations.map(resv => {
                     return <OneReservation 
                         key={resv.reservation_id} 
                         resv={resv} 
@@ -41,9 +44,9 @@ export default function ReservationsList({ reservations, purpose }){
                         handleCancel={()=>{
                             updateStatus(resv.reservation_id, "cancelled")
                                 .then(()=>history.go("/"))
-                            .catch(setStatusErr)
-                        }}/>
-                }): <p>No reservations found</p>}
+                                .catch(setStatusErr)
+                        }}/>})
+                : <p>No reservations found</p>}
                 </tbody>
             </table>
         </div>
