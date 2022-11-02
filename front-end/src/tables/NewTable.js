@@ -10,19 +10,17 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 export default function NewTable() {
 // --- hooks, state, and misc. ---
-    const history = useHistory();
-
     const INITIAL_TABLE_DATA = {
         table_name: "",
         capacity: 0
     };
-
+    const history = useHistory();
     const [tableData, setTableData] = useState(INITIAL_TABLE_DATA);
     const [formErr, setFormErr] = useState(null);
 
 // --- handlers ---
     const handleInputChange = ({ target }) => {
-        setTableData({...tableData, [target.name]: target.value})
+        setTableData({...tableData, [target.name]: target.value});
     };
 
     const handleSubmit = (e) => {
@@ -40,9 +38,7 @@ export default function NewTable() {
             <ErrorAlert error={formErr}/>
             <form
                 onSubmit={handleSubmit}>
-                    <label
-                        htmlFor="table_name" 
-                        className="form-label">Table Name</label>
+                    <label htmlFor="table_name" className="form-label">Table Name</label>
                     <input 
                         name="table_name"
                         type="text"
@@ -50,10 +46,8 @@ export default function NewTable() {
                         onChange={handleInputChange}
                         required
                         className="form-control"/>
-                    <label
-                        htmlFor="capacity" 
-                        className="form-label">Table Capacity</label>
-
+                        
+                    <label htmlFor="capacity" className="form-label">Table Capacity</label>
                     <input 
                         name="capacity"
                         type="number"
