@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { today, previous, next } from "../utils/date-time";
+import { today, previous, next, formatAsDate } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationsList from "../reservations/ReservationsList";
+import Reservations from "../reservations/Reservations";
 import TableList from "../tables/TableList";
+import "../stylesheets/dashboard.css";
+import moment from "moment";
 
 /**
  * Defines the /dashboard page.
@@ -24,7 +26,6 @@ export default function Dashboard({date, setDate}) {
   const [reservationsErr, setReservationsErr] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesErr, setTablesErr] = useState(null);
-  
 // --- useEffect ---
   useEffect(() => {
     function loadDashboard() {
@@ -70,32 +71,35 @@ export default function Dashboard({date, setDate}) {
     var newRelativePathQuery = `${window.location.pathname}?${query.toString()}`
     history.push(newRelativePathQuery);
   };
-    
 // --- return ---
-  return (
-    <main className="container-fluid">
-      <h1>Reservations for {date}</h1>
 
-      <div className="btn-group" role="group">
+  return (
+    <main id="Dashboard">
+      <h4 className="center-text">Reservations for</h4>
+      <h1 className="center-text">{moment(date).format("MMMM D, YYYY")}</h1>
+
+      <div id="days-button-container">
         <button 
-          onClick={()=>updateQuery(previous(date))}
-          className="btn btn-secondary">Previous Day</button>
+          onClick={()=>updateQuery(previous(date))}>Previous Day</button>
         <button 
-          onClick={()=>updateQuery(today())}
-          className="btn btn-secondary">Today</button>
+          onClick={()=>updateQuery(today())}>Today</button>
         <button 
-          onClick={()=>updateQuery(next(date))}
-          className="btn btn-secondary">Next Day</button>
+          onClick={()=>updateQuery(next(date))}>Next Day</button>
       </div>
 
-      <ErrorAlert error={reservationsErr} />
-      <ReservationsList reservations={reservations} purpose={"dashboard"}/>
+      <div id="res-container">
+        <ErrorAlert error={reservationsErr} />
+        {reservations.length
+          ? <Reservations reservations={reservations} purpose={"dashboard"}/>
+          : <p>No reservations found</p>
+        }
+      </div>
 
-      <h1 className="mt-5">Tables</h1>
+      <h3 className="center-text">Tables</h3>
       <ErrorAlert error={tablesErr} />
-      {tables.length ?
-      <TableList tables={tables}/> :
-      <p>No tables</p>
+      {tables.length 
+        ? <TableList tables={tables}/> 
+        : <p>No tables</p>
       }
     </main>
   );

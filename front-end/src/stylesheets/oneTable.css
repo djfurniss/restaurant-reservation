@@ -1,0 +1,28 @@
+#OneTable{
+    /* width: 200px;
+    height: 200px; */
+    /* padding: 20px; */
+    /* background-color: #2AB7CA; */
+    margin: 15px;
+    border-radius: 1vw;
+    min-width: 200px;
+}
+#OneTable #table-name{
+    background-color: #2AB7CA;
+    padding: 20px;
+    border-top-left-radius: 1vw;
+    border-top-right-radius: 1vw;
+    margin-bottom: 0px;
+}
+
+#OneTable #table-info{
+    padding: 20px;
+    background-color: #F4F4F8;
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+}
+#OneTable #finish-button{
+    border-style: none;
+    background-color: #D4D4D7;
+    border-radius: .5vw;
+}

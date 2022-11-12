@@ -1,5 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
+import moment from "moment";
+import "../stylesheets/oneReservation.css";
 
 /**
  * Responsible for rendering one reservation's information.
@@ -19,40 +21,37 @@ export default function OneReservation({ resv, purpose, handleCancel }){
     
 // ---return ---
     return (
-        purpose === "dashboard" && resv.status === "finished" || resv.status === "cancelled" ? null :
-        // if this component is rendering for the dashboard, we don't want any reservations where the status is finished or cancelled, so null is returned for those
-        <tr>
-            <td scope="row">{`${resv.first_name} ${resv.last_name}`}</td>
-            <td>{resv.mobile_number}</td>
-            <td>{resv.reservation_date}</td>
-            <td>{resv.reservation_time}</td>
-            <td>{resv.people}</td>
-            <td data-reservation-id-status={resv.reservation_id}>{resv.status}</td>
-            <td>
-                <div className="btn-group mx-3" role="group">
-                {/* these two conditions are the same but are kept seperate so they can render their own buttons to keep the btn-group intact */}
-                    {resv.status === "booked" &&
+        <div id="OneReservation">
+            <div><h4>Name</h4>{resv.last_name}, {resv.first_name}</div>
+            <div><h4>Phone</h4>{resv.mobile_number}</div>
+            <div><h4>Date</h4> {moment(resv.reservation_date).format("MMMM D")}th</div>
+            <div><h4>Time</h4> {resv.reservation_time}</div>
+            <div><h4>Party size</h4> {resv.people}</div>
+            <div><h4>Status</h4> {resv.status}</div>
+
+            <div id="button-container">
+                 {/* these two conditions are the same but are kept seperate so they can render their own buttons to keep the btn-group intact */}
+                   {resv.status === "booked" &&
                         <button 
+                            id="seat-res-button"
                             onClick={()=>history.push(`/reservations/${resv.reservation_id}/seat`)}
-                            href={`/reservations/${resv.reservation_id}/seat`}
-                            className="btn btn-sm btn-secondary">Seat</button>
+                            href={`/reservations/${resv.reservation_id}/seat`}>Seat</button>
                     }
                     {resv.status === "booked" &&
                         <button 
+                            id="edit-res-button"
                             onClick={()=>history.push(`/reservations/${resv.reservation_id}/edit`)}
-                            href={`/reservations/${resv.reservation_id}/edit`}
-                            className="btn btn-sm btn-secondary">Edit</button>
+                            href={`/reservations/${resv.reservation_id}/edit`}>Edit</button>
                     }
                     
-                    <button 
+                    {resv.status !== "cancelled" && <button 
+                        id="cancel-res-button"
                         onClick={()=>{
                             window.confirm("Do you want to cancel this reservation? This cannot be undone.") 
                             && handleCancel()
                         }}
-                        data-reservation-id-cancel={resv.reservation_id}
-                        className="btn btn-sm btn-danger">Cancel</button>
+                        data-reservation-id-cancel={resv.reservation_id}>Cancel</button>}
                 </div>
-            </td>
-        </tr>
+        </div>
     )
 };

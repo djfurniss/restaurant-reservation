@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import OneTable from "../tables/OneTable";
+import "../stylesheets/tables.css";
 
 /**
  * Responsible for rendering a list of tables
@@ -24,25 +25,11 @@ export default function TableList ({ tables }) {
     };
 
     return (
-        <div>
+        <div id="TableList">
             <ErrorAlert error={finishErr}/>
-            <table className="table table-striped table-borderless">
-                <thead>
-                    <tr>
-                        <th scope="col">Table</th>
-                        <th scope="col">Capacity</th>
-                        <th scope="col">Availability</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tables.map((table) => {
-                       return <OneTable 
-                        key={table.table_id} 
-                        table={table} 
-                        handleFinish={handleFinish}/>
-                    })}
-                </tbody>
-            </table>
+            {tables.map(table => {
+                return <OneTable table={table} handleFinish={handleFinish}/>
+            })}
         </div>
     )
 };

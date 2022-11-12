@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { findReservationByNumber } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationsList from "../reservations/ReservationsList";
+import Reservations from "../reservations/Reservations";
 
 /**
  * Defines the /search page
@@ -41,7 +41,7 @@ export default function Search(){
                 <button type="submit" className="btn btn-secondary">Find</button>
             </form>
 
-            <ReservationsList reservations={reservations} purpose={"search"}/>
+            <Reservations reservations={reservations} purpose={"search"}/>
         </div>
     )
 };

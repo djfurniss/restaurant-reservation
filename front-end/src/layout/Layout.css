@@ -1,4 +1,23 @@
-.side-bar {
+#Layout{
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+}
+#Layout #menu {
   background-color: #393a44;
   min-width: 200px;
+}
+#Layout #content{
+  padding: 40px;
+  width: 100%;
+}
+
+@media all and (min-width: 768px){
+  #Layout{
+    flex-direction: row;
+  }
+  #Layout #menu{
+    width: calc(200px + 5vw);
+  }
 }

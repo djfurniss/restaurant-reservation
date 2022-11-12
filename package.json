@@ -49,6 +49,8 @@
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED",
   "dependencies": {
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "react-icons": "^4.6.0",
+    "react-modal": "^3.16.1"
   }
 }
