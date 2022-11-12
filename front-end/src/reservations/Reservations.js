@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactModal from "react-modal";
 import { useHistory } from "react-router";
 import { updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
